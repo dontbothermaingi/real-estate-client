@@ -1,0 +1,164 @@
+{
+    "houses":[
+        {
+            "id":"1",
+            "image":"/op45.jpeg",
+            "address":"Business Bay",
+            "age":"Clayton Residency, Business Bay, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"688",
+            "rooms":"3",
+            "property_type":"Apartment"
+
+        },
+        {
+            "id":"2",
+            "image":"/op.jpeg",
+            "address":"Jumeirah Village Circle",
+            "age":"Marwa Homes 3, Jumeirah Village Circle, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"450",
+            "rooms":"3",
+            "property_type":"House"
+
+        },
+        {
+            "id":"3",
+            "image":"/op3.jpeg",
+            "address":"Expo City",
+            "age":"Expo City Sidr Residences, Expo City, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"620",
+            "rooms":"3",
+            "property_type":"Commercial"
+
+        },
+        {
+            "id":"4",
+            "image":"/op4.jpeg",
+            "address":"Expo City",
+            "age":"Terra Heights, Expo City, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"350",
+            "rooms":"2",
+            "property_type":"House"
+
+        },
+        {
+            "id":"5",
+            "image":"/OP10.jpeg",
+            "address":"Silicon Oasis",
+            "age":"Oasiz, Dubai Silicon Oasis, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"300",
+            "rooms":"3",
+            "property_type":"Villa"
+        },
+        {
+            "id":"6",
+            "image":"/OP11.jpeg",
+            "address":"Silicon Oasis",
+            "age":"Oasiz, Dubai Silicon Oasis, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"350",
+            "rooms":"2",
+            "property_type":"Commercial"
+
+        },
+        {
+            "id":"7",
+            "image":"/OP12.jpeg",
+            "address":"Dubai Marina",
+            "age":"LIV Marina, Dubai Marina, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"500",
+            "rooms":"3",
+            "property_type":"Villa"
+
+        },
+        {
+            "id":"8",
+            "image":"/op15.jpeg",
+            "address":"Jumeirah Village Circle",
+            "age":"One Park Central, Jumeirah Village Circle, Dubai",
+            "road":"AL RAYAEH RD",
+            "price":"399",
+            "rooms":"1",
+            "property_type":"Apartment"
+
+        }
+    ],
+
+    "testimonials":[
+        {
+            "id":1,
+            "photo":"/PFP2.jpeg",
+            "date":"March 15, 2024",
+            "name":"James Carter",
+            "testimony":"Before working with this company, I struggled to find a profitable rental property. Their team guided me through every step, and now I own a prime apartment complex generating steady income!"
+        },
+        {
+            "id":2,
+            "photo":"/PFP1.jpeg",
+            "date":"March 29, 2024",
+            "name":"Emily Dawson ",
+            "testimony":"I always wanted to own a vacation rental, and this company made my dream a reality. Now I have a beautiful Airbnb that generates great income year-round!"
+        },
+        {
+            "id":3,
+            "photo":"/PFP3.jpeg",
+            "date":"May 16, 2024",
+            "name":"Sophia Patel ",
+            "testimony":"Selling my house was stressful, but their team handled everything with professionalism. I got a fantastic deal, and the process was faster than I expected!"
+        },
+        {
+            "id":4,
+            "photo":"/PFP4.jpeg",
+            "date":"June 21, 2024",
+            "name":"Michael Johnson",
+            "testimony":"I was hesitant about real estate investing, but they helped me purchase a property in a growing area. The value has already increased by 15% in just six months!"
+        },
+        {
+            "id":5,
+            "photo":"/PFP5.jpeg",
+            "date":"June 5, 2024",
+            "name":"Isabella Martinez",
+            "testimony":"Their knowledge of the market is unmatched! I bought a home in an up-and-coming neighborhood, and its value has already gone up significantly!"
+        },
+        {
+            "id":6,
+            "photo":"/PFP6.jpeg",
+            "date":"April 8, 2024",
+            "name":"Daniel Thompson",
+            "testimony":"Buying my first home was overwhelming until I found this company. They made the process seamless, and now I’m a proud homeowner with zero regrets!"
+        },
+        {
+            "id":7,
+            "photo":"/PFP7.jpeg",
+            "date":"July 10, 2024",
+            "name":"Samuel White",
+            "testimony":"Their property management services have been a game-changer for me. My rentals are fully occupied, and I no longer worry about maintenance and tenant issues!"
+        },
+        {
+            "id":8,
+            "photo":"/PFP8.jpeg",
+            "date":"August 3, 2024",
+            "name":" Natalie Brooks",
+            "testimony":"They made buying a commercial property simple and stress-free. My retail space is now fully leased, and I couldn’t be happier with the returns!"
+        },
+        {
+            "id":9,
+            "photo":"/PFP9.jpeg",
+            "date":"July 20, 2024",
+            "name":"Olivia Green",
+            "testimony":"As a first-time investor, I was nervous, but they walked me through everything. Now, I own my first rental property, and it’s generating passive income!"
+        },
+        {
+            "id":10,
+            "photo":"/PFP10.jpeg",
+            "date":"May 2, 2024",
+            "name":"Ethan Rodriguez",
+            "testimony":"I had an empty piece of land for years, unsure what to do with it. Thanks to their investment advice, I developed a commercial space, and the returns have been incredible!"
+        }
+    ]
+}

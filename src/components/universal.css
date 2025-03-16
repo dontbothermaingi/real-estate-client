@@ -1,0 +1,35 @@
+.landing {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.landing1{
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.footer{
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+.space {
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-top: 50px;
+}
+
+.page3 {
+    margin-left: 100px;
+    margin-right: 100px;
+    padding: 40px;
+    /* width: 1280px;  Adjust as needed */
+    overflow-x: auto;  /* Enables horizontal scrolling */
+}
+
+.scroll{
+    overflow-x: auto;
+}
