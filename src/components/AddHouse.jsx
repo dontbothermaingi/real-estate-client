@@ -7,14 +7,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import AddHouseMobile from "./AddHouseMobile";
+import { Add, DeleteForever } from "@mui/icons-material";
+import AddOutlined from "@mui/icons-material/AddOutlined";
 
 
 function AddHouse (){
 
-    const [descriptionCounter, setDescriptionCounter] = useState(1);
-    const decsriptionLabel = `Despription Paragraph ${descriptionCounter}`;
-    const[amenityCounter, setAmenityCounter] = useState(1);
-    const amenityLabel = `Amenity ${amenityCounter}`;
     const [file,setFile] = useState();
     const fileUploadRef = useRef();
 
@@ -38,13 +36,9 @@ function AddHouse (){
         photos:[],
     })
 
-    const [descriptionData, setDescriptionData] = useState({
-        description:"",
-    })
+    const [descriptionData, setDescriptionData] = useState([{description:""}])
 
-    const [amenityData, setAmenityData] = useState({
-        amenity:"",
-    })
+    const [amenityData, setAmenityData] = useState([{amenity:""}])
 
     const [photoData, setPhotoData] = useState({
         photo:"",
@@ -78,62 +72,42 @@ function AddHouse (){
     }
     
 
-    function handleDescriptionChange(event){
-        const{name,value} = event.target
-
-        setDescriptionData(prevDescriptionData => ({
-            ...prevDescriptionData,
-            [name]:value,
-        }))
+    // Function to handle the update of description input field
+    function handleDescriptionChange(event,index){
+        const values = [...descriptionData]
+        values[index].description = event.target.value;
+        setDescriptionData(values);
     }
 
-    function handleAmenityChange(event){
-        const{name,value} = event.target
-
-        setAmenityData(prevAmenityData => ({
-            ...prevAmenityData,
-            [name]:value,
-        }))
+    // Function to handle adding new description inputfields
+    function handleNewDescriptionInputField(){
+        setDescriptionData([...descriptionData, {description:""}]);
     }
 
-    function AddDescription(){
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            descriptions:[...prevFormData.descriptions, descriptionData]
-        }))
-
-        setDescriptionCounter(prevDescriptionCounter => prevDescriptionCounter + 1 )
-    }
-
+    // Function to delete a description field
     function DeleteDescription(index){
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            descriptions: prevFormData.descriptions.filter((_,i) => i !== index)
-        }))
-
-        setDescriptionCounter(prevDescriptionCounter => prevDescriptionCounter + 1 )
-
+        const newDescriptionField = [...descriptionData]
+        newDescriptionField.splice(index, 1);
+        setDescriptionData(newDescriptionField);
     }
 
-    function AddAmenity(){
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            amenities:[...prevFormData.amenities, amenityData]
-        }))
-
-        setAmenityCounter(prevAmenityCounter => prevAmenityCounter + 1);
+    // Function to handle the update of an amenity input field
+    function handleAmenityChange(event,index){
+        const values = [...amenityData];
+        values[index].amenity = event.target.value;
+        setAmenityData(values);
     }
 
+    // function to handle the addition of input fields
+    function handleNewAmenityInputField(){
+        setAmenityData([...amenityData, {amenity:""}]);
+    }
+
+    // function to remove an amenity input field by index
     function DeleteAmenity(index){
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            amenities: prevFormData.amenities.filter((_,i) => i !== index)
-        }))
-
-        setAmenityCounter(prevAmenityCounter => prevAmenityCounter - 1);
-
+        const newAmenityField = [...amenityData];
+        newAmenityField.splice(index , 1);
+        setAmenityData(newAmenityField);
     }
 
     function AddPhoto(){
@@ -159,42 +133,53 @@ function AddHouse (){
 
     }
 
-    function handleSubmit(){
-        fetch("url",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(formData)
-        })
-        .then(response => {
-            if(!response.ok){
-                throw new Error('Network response was not ok')
-            }
-            return response.json();
-        })
-        .then((data) => {
+    function handleSubmit(event){
 
-            setFormData({
-                location:"",
-                address:"",
-                purpose:"",
-                price:"",
-                beds:"",
-                bathrooms:"",
-                square_feet:"",
-                property_type:"",
-                furnishing:"",
-                propertyId:"",
-                completion:"",
-                year_built:"",
-                descriptions:[],
-                amenities:[],
-            })
-        })
-        .catch((error) => {
-            console.error('Error with stock update operations:', error);
-        })
+        event.preventDefault();
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            descriptions:[...prevFormData.descriptions, descriptionData],
+            amenities:[...prevFormData.amenities, amenityData],
+        }))
+
+        console.log(formData.amenities)
+
+        // fetch("url",{
+        //     method:"POST",
+        //     headers:{
+        //         "Content-Type":"application/json"
+        //     },
+        //     body:JSON.stringify(formData)
+        // })
+        // .then(response => {
+        //     if(!response.ok){
+        //         throw new Error('Network response was not ok')
+        //     }
+        //     return response.json();
+        // })
+        // .then((data) => {
+
+        //     setFormData({
+        //         location:"",
+        //         address:"",
+        //         purpose:"",
+        //         price:"",
+        //         beds:"",
+        //         bathrooms:"",
+        //         square_feet:"",
+        //         property_type:"",
+        //         furnishing:"",
+        //         propertyId:"",
+        //         completion:"",
+        //         year_built:"",
+        //         descriptions:[],
+        //         amenities:[],
+        //     })
+        // })
+        // .catch((error) => {
+        //     console.error('Error with stock update operations:', error);
+        // })
     }
 
     const locations = [
@@ -268,29 +253,82 @@ function AddHouse (){
                 <PropertyDisplayNavbar />
             </Box>
         
-            <Box paddingLeft={'300px'} paddingRight={'300px'} paddingTop={'20px'}>
+            <Box paddingLeft={'300px'} paddingRight={'300px'} paddingTop={'20px'} paddingBottom={'30px'}>
                 <Typography fontFamily={"GT Ultrabold"} fontSize={"40px"} color="black" textAlign={'center'}>CREATE A HOUSE LISTING</Typography>
-                <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column'}}>
+                <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', backgroundColor:'white', borderRadius:'15px', border:'2px dashed #ddd', padding:'30px'}}>
 
                     <Box>
                         <TableContainer>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell><Typography fontFamily={"GT Bold"} fontSize={'30px'}>House Photos</Typography></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {formData.photos.map((photo, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell>
-                                            {photo.preview ? (
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell><Typography fontFamily={"GT Bold"} fontSize={'30px'}>House Photos</Typography></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {formData.photos.map((photo, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell>
+                                                {photo.preview ? (
 
-                                                <Box
-                                                    width={'600px'} 
-                                                    height={'300px'} 
-                                                >
+                                                    <Box
+                                                        width={'600px'} 
+                                                        height={'300px'} 
+                                                    >
+                                                        <img 
+                                                            src={photo.preview}
+                                                            alt="Uploaded Preview"
+                                                            style={{
+                                                                width: "100%",
+                                                                height: "100%",
+                                                                objectFit: "contain",
+                                                                borderRadius: "15px"
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                ) : (
+                                                    "No Image"
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <IconButton color="error" onClick={() => DeletePhoto(index)}>
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    <TableRow>
+                                    <TableCell>
+                                        {/* Drag and Drop Area */}
+                                        <Box 
+                                            onClick={handleImageUpload}
+                                            onDragOver={handleDragOver}
+                                            onDrop={handleDrop}
+                                            onDragLeave={handleDragLeave}
+                                        >
+                                            <Box 
+                                                border={"2px dashed #ddd"} 
+                                                width={'600px'} 
+                                                height={'300px'} 
+                                                borderRadius={'15px'} 
+                                                display={'flex'} 
+                                                justifyContent={'center'} 
+                                                flexDirection={'column'} 
+                                                alignItems={'center'}
+                                                position="relative"
+                                                padding={'20px'}
+                                                sx={{
+                                                    transition:"transform 0.3s ease-in-out",
+                                                    ":hover":{
+                                                        transform:'scale(1.03)',
+                                                        // backgroundColor:"#ddd"
+                                                    }
+                                                }}
+                                            >
+                                                {/* Show uploaded image if available */}
+                                                {file ? (
                                                     <img 
-                                                        src={photo.preview}
+                                                        src={file}
                                                         alt="Uploaded Preview"
                                                         style={{
                                                             width: "100%",
@@ -299,110 +337,50 @@ function AddHouse (){
                                                             borderRadius: "15px"
                                                         }}
                                                     />
-                                                </Box>
-                                            ) : (
-                                                "No Image"
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            <IconButton color="error" onClick={() => DeletePhoto(index)}>
-                                                <CloseIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                                <TableRow>
-                                <TableCell>
-                                    {/* Drag and Drop Area */}
-                                    <Box 
-                                        onClick={handleImageUpload}
-                                        onDragOver={handleDragOver}
-                                        onDrop={handleDrop}
-                                        onDragLeave={handleDragLeave}
-                                    >
-                                        <Box 
-                                            border={"2px dashed #ddd"} 
-                                            width={'600px'} 
-                                            height={'300px'} 
-                                            borderRadius={'15px'} 
-                                            display={'flex'} 
-                                            justifyContent={'center'} 
-                                            flexDirection={'column'} 
-                                            alignItems={'center'}
-                                            position="relative"
-                                            padding={'20px'}
-                                            sx={{
-                                                transition:"transform 0.3s ease-in-out",
-                                                ":hover":{
-                                                    transform:'scale(1.03)',
-                                                    // backgroundColor:"#ddd"
-                                                }
-                                            }}
-                                        >
-                                            {/* Show uploaded image if available */}
-                                            {file ? (
-                                                <img 
-                                                    src={file}
-                                                    alt="Uploaded Preview"
-                                                    style={{
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        objectFit: "contain",
-                                                        borderRadius: "15px"
-                                                    }}
-                                                />
-                                            ) : (
-                                                <>
-                                                    <Box display={'flex'} justifyContent={'center'}>
-                                                        <img 
-                                                            src="upload.png"
-                                                            alt="Photo Upload"
-                                                            style={{width:"120px", height:"auto"}}
-                                                        />
-                                                    </Box>
-                                                    <Box display={'flex'} alignItems={'center'} flexDirection={'column'}>
-                                                        <Typography fontFamily={'GT Medium'} color="black" fontSize={'25px'}>
-                                                            Drop your image here or browse
-                                                        </Typography>
-                                                        <Typography fontFamily={'GT Light'} color="black">
-                                                            Supports: PNG, JPG, JPEG, WEBP
-                                                        </Typography>
-                                                    </Box>
-                                                </>
-                                            )}
+                                                ) : (
+                                                    <>
+                                                        <Box display={'flex'} justifyContent={'center'}>
+                                                            <img 
+                                                                src="upload.png"
+                                                                alt="Photo Upload"
+                                                                style={{width:"120px", height:"auto"}}
+                                                            />
+                                                        </Box>
+                                                        <Box display={'flex'} alignItems={'center'} flexDirection={'column'}>
+                                                            <Typography fontFamily={'GT Medium'} color="black" fontSize={'25px'}>
+                                                                Drop your image here or browse
+                                                            </Typography>
+                                                            <Typography fontFamily={'GT Light'} color="black">
+                                                                Supports: PNG, JPG, JPEG, WEBP
+                                                            </Typography>
+                                                        </Box>
+                                                    </>
+                                                )}
+                                            </Box>
+
+                                            {file && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
                                         </Box>
 
-                                        {file && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
-                                    </Box>
+                                        {/* Hidden File Input */}
+                                        <input 
+                                            type="file"
+                                            name="photo"
+                                            accept="image/*"
+                                            onChange={handlePhotoChange}
+                                            hidden
+                                            ref={fileUploadRef}
+                                            multiple
+                                        />
+                                    </TableCell>
 
-                                    {/* Hidden File Input */}
-                                    <input 
-                                        type="file"
-                                        name="photo"
-                                        accept="image/*"
-                                        onChange={handlePhotoChange}
-                                        hidden
-                                        ref={fileUploadRef}
-                                        multiple
-                                    />
-                                </TableCell>
-
-                                </TableRow>
-                            </TableBody>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
                         </TableContainer>
                         <Button onClick={AddPhoto} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>ADD PHOTO</Button>
 
                     </Box>
-                    {/* <Typography fontFamily={"GT Bold"} fontSize={'30px'} color="black" mb={'20px'}>House Photos</Typography>
-                    <TextField 
-                        type="file"
-                        name="image"
-                        value={formData.image}
-                        onChange={handleChange}
-                        variant="outlined"
-                        sx={{mb:'20px'}}
-                    /> */}
-
+                    
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
 
                     <Box>
@@ -595,101 +573,72 @@ function AddHouse (){
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
 
                     <Box>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell sx={{minWidth:410}}><Typography fontFamily={"GT Bold"} fontSize={'30px'}>Descriptions</Typography></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {formData.descriptions.map((description,index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{description.description}</TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    color="error"
-                                                    onClick={() => DeleteDescription(index)}
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                        <Typography color="black" fontFamily={"GT Bold"} fontSize={'30px'}>Descriptions</Typography>
 
-                                    <TableRow>
-                                        <TableCell>
-                                            <TextField 
-                                                type="text"
-                                                name="description"
-                                                value={descriptionData.description}
-                                                onChange={handleDescriptionChange}
-                                                variant="outlined"
-                                                label={decsriptionLabel}
-                                                sx={{mb:'20px'}}
-                                                size="small"
-                                                fullWidth
-                                                multiline
-                                                minRows={4}  // Initial number of rows
-                                                maxRows={20}   // Maximum number of rows
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Button onClick={AddDescription} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>SAVE DESCRIPTION</Button>
+                        {descriptionData.map((description,index) => (
+                            <Box key={index} display={'flex'} alignItems={'center'} mb={'20px'}>
+                                <TextField 
+                                    type="text"
+                                    value={description.description}
+                                    name="description"
+                                    variant="outlined"
+                                    placeholder={'Description'}
+                                    onChange={(e) => handleDescriptionChange(e, index)}
+                                    multiline
+                                    minRows={4}
+                                    maxRows={20}
+                                    size="small"
+                                    fullWidth
+                                                
+                                />
+
+                                <IconButton onClick={() => DeleteDescription(index)}>
+                                    <DeleteForever sx={{fontSize:'30px', color:'black', border:'2px solid red', padding:'10px', borderRadius:"8px", ":hover":{backgroundColor:'red', color:'white'}}}/>
+                                </IconButton>
+                            </Box>
+                        ))}
+
+                            <Button onClick={handleNewDescriptionInputField} variant="contained" style={{backgroundColor:'grey', color:'white', marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <AddOutlined sx={{color:'white', fontSize:'19px'}}/>
+                                <Typography fontFamily={"GT Bold"} fontSize={'12px'}>Add new Paragraph</Typography>
+                            </Button>
                     </Box>
 
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
 
                     <Box>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableCell sx={{minWidth: 410}}><Typography fontFamily={"GT Bold"} fontSize={'30px'}>Amenities</Typography></TableCell>
-                                </TableHead>
-                                <TableBody>
-                                    {formData.amenities.map((amenity,index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{amenity.amenity}</TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    color="error"
-                                                    onClick={() => DeleteAmenity(index)}
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    <TableRow>
-                                        <TableCell>
-                                            <TextField  
-                                                type="text"
-                                                name="amenity"
-                                                value={amenityData.amenity}
-                                                onChange={handleAmenityChange}
-                                                variant="outlined"
-                                                label={amenityLabel}
-                                                sx={{mb:'20px'}}
-                                                size="small"
-                                                fullWidth
-                                                multiline
-                                                minRows={4}  // Initial number of rows
-                                                maxRows={20}   // Maximum number of rows
+                        <Typography color="black" fontFamily={"GT Bold"} fontSize={'30px'}>Amenities</Typography>
 
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Button onClick={AddAmenity} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>SAVE AMENITY</Button>
+                        <Box>
+
+                            {amenityData.map((amenity,index) => (
+                                <Box key={index} display={'flex'} alignItems={'center'} gap={'10px'} mb={'20px'}>
+                                    <TextField 
+                                        type="text"
+                                        value={amenity.amenity}
+                                        name="amenity"
+                                        variant="outlined"
+                                        placeholder={'Amenity'}
+                                        onChange={(e) => handleAmenityChange(e, index)}
+                                    />
+
+                                    <IconButton onClick={() => DeleteAmenity(index)}>
+                                        <DeleteForever sx={{fontSize:'30px', color:'black', border:'2px solid red', padding:'10px', borderRadius:"8px", ":hover":{backgroundColor:'red', color:'white'}}}/>
+                                    </IconButton>
+                                </Box>
+                            ))}
+
+                            <Button onClick={handleNewAmenityInputField} variant="contained" style={{backgroundColor:'grey', color:'white', marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <AddOutlined sx={{color:'white', fontSize:'19px'}}/>
+                                <Typography fontFamily={"GT Bold"} fontSize={'12px'}>Add new Amenity</Typography>
+                            </Button>
+
+                        </Box>
                     </Box>
 
+                    <Button type="submit" variant="contained" sx={{marginTop:'30px', margin:'auto',fontSize:'20px',fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>POST HOUSE</Button>
+
                 </form>
-                <Button type="submit" variant="contained" sx={{width:'100%', margin:'20px', fontSize:'20px',fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>POST HOUSE</Button>
 
             </Box>
 

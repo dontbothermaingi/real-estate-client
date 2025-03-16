@@ -7,10 +7,12 @@ import { useState } from "react";
 import DetailedProperty from "./DetailedProperty";
 import PropertyDisplayMobile from "./PropertyDisplayMobile";
 import Page2 from "./Page2";
+import { useParams } from "react-router";
 
 function PropertyDisplay (){
 
     const isMobile = useMediaQuery("(max-width:1700px)")
+    const {aim} = useParams()
 
     const [filters, setFilters] = useState({
         location: "",
@@ -27,12 +29,12 @@ function PropertyDisplay (){
     return ( 
         <Box>
             {isMobile ? (
-                <PropertyDisplayMobile/>
+                <PropertyDisplayMobile />
             ):(
                 <Box sx={{backgroundColor:"#F4F5FC"}}>
 
                 <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
-                    <PropertyDisplayNavbar />
+                    <PropertyDisplayNavbar aim={aim}/>
                 </Box>
 
                 <Box paddingLeft={'50px'} paddingRight={'20px'} paddingTop={'40px'} display={'flex'} gap={'20px'}>
@@ -60,7 +62,7 @@ function PropertyDisplay (){
                             '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
                         }}
                     >
-                        <Houses filters={filters} setHouseId={setHouseId}/>
+                        <Houses aim={aim} filters={filters} setHouseId={setHouseId}/>
                     </Box>
 
                     <Divider 
@@ -81,7 +83,7 @@ function PropertyDisplay (){
                             '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
                         }}
                     >
-                        <DetailedProperty houseId={houseId}/>
+                        <DetailedProperty aim={aim} houseId={houseId}/>
                     </Box>
 
                     <Box display={"none"}>

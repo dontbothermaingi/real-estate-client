@@ -2,7 +2,7 @@ import { Box, FormControl, IconButton, MenuItem, Select, Typography, useMediaQue
 import { useState } from "react";
 import { motion } from "motion/react"
 import Menu from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import LocalPhone from "@mui/icons-material/LocalPhone";
 import { animate } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm";
 
@@ -12,6 +12,7 @@ function PropertyDisplayNavbar(){
     const [icon, setIcon] = useState("")
     const isMobile = useMediaQuery('(max-width: 1210px)')
     const navigate = useNavigate()
+    const {aim} = useParams()
 
     animate(".menu", { scale: [0.4, 1] }, { ease: "circInOut", duration: 1 })
 
@@ -19,12 +20,13 @@ function PropertyDisplayNavbar(){
         setIcon(icon === type ? null : type)
     }
 
-    function handleBuy(){
-        navigate("/properties")
+    function handleBuy(aim){
+        navigate(`/properties/${aim}`)
         handleChangeIcon('buy')
     }
 
-    function handleRent(){
+    function handleRent(aim){
+        navigate(`/properties/${aim}`)
         handleChangeIcon('rent')
     }
 
@@ -121,9 +123,9 @@ function PropertyDisplayNavbar(){
                         transition={{ ease: "circInOut", duration: 1.9, type:'spring', }}
                     >
                         <Box sx={{display:'flex', flexDirection:'row', alignItems:"center", gap:"80px"}}>
-                            {navBarOption("Buy","buy", handleBuy)}
-                            {navBarOption("Rent", "rent", handleRent)}
-                            {navBarOption("Services", "services", handleServices)}
+                            {navBarOption("Buy",'buy', () => handleBuy('Buy'))}
+                            {navBarOption("Rent", "rent", () => handleRent("Rent"))}
+                            {/* {navBarOption("Services", "services", handleServices)} */}
                         </Box>
                     </motion.div>
 

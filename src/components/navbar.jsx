@@ -19,12 +19,13 @@ function NavBar(){
         setIcon(icon === type ? null : type)
     }
 
-    function handleBuy(){
-        navigate("/properties")
+    function handleBuy(aim){
+        navigate(`/properties/${aim}`)
         handleChangeIcon('buy')
     }
 
-    function handleRent(){
+    function handleRent(aim){
+        navigate(`/properties/${aim}`)
         handleChangeIcon('rent')
     }
 
@@ -133,11 +134,11 @@ function NavBar(){
                         transition={{ ease: "circInOut", duration: 1.9, type:'spring', }}
                     >
                         <Box sx={{display:'flex', flexDirection:'row', alignItems:"center", gap:"80px"}}>
-                            {navBarOption("Buy","buy", handleBuy)}
-                            {navBarOption("Rent", "rent", handleRent)}
+                            {navBarOption("Buy","buy", () => handleBuy('Buy'))}
+                            {navBarOption("Rent", "rent", () => handleRent('Rent'))}
                             {/* {navBarOption("Projects", "projects", handleProjects)} */}
                             {/* {navBarOption("Area", "area", handleArea)} */}
-                            {navBarOption("Services", "services", handleServices)}
+                            {/* {navBarOption("Services", "services", handleServices)} */}
                             {/* {navBarOption("Blogs", "blogs", handleBlogs)} */}
                         </Box>
                     </motion.div>
