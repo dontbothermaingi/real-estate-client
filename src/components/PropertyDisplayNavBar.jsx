@@ -6,13 +6,11 @@ import { useNavigate, useParams } from "react-router";
 import LocalPhone from "@mui/icons-material/LocalPhone";
 import { animate } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm";
 
-function PropertyDisplayNavbar(){
+function PropertyDisplayNavbar({setPupose, pupose}){
 
-    const [currency, setCurrency] = useState('AED')
     const [icon, setIcon] = useState("")
     const isMobile = useMediaQuery('(max-width: 1210px)')
     const navigate = useNavigate()
-    const {aim} = useParams()
 
     animate(".menu", { scale: [0.4, 1] }, { ease: "circInOut", duration: 1 })
 
@@ -40,6 +38,10 @@ function PropertyDisplayNavbar(){
 
     function handleHome(){
         navigate("/")
+    }
+
+    function userAim(aim){
+        setPupose(aim)
     }
 
     const navBarOption = (option,type, onClickHandler) => (
@@ -87,8 +89,8 @@ function PropertyDisplayNavbar(){
                                 <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                                     <Select
                                         type="text"
-                                        onChange={(e) => setCurrency(e.target.value)}
-                                        value={currency}
+                                        onChange={(e) => userAim(e.target.value)}
+                                        value={pupose}
                                         sx={{
                                             color:'black',
                                             backgroundColor:'white',
@@ -96,14 +98,13 @@ function PropertyDisplayNavbar(){
                                             fontSize:'10px',
                                         }}
                                     >
-                                        <MenuItem value="AED"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>AED</Typography></MenuItem>
-                                        <MenuItem value="USD"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>USD</Typography></MenuItem>
-                                        <MenuItem value="EUROS"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>EUROS</Typography></MenuItem>
+                                        <MenuItem value="Buy"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>Buy</Typography></MenuItem>
+                                        <MenuItem value="Rent"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>Rent</Typography></MenuItem>
                                     </Select>
                                 </FormControl>
                             </Box>
                             <Box>
-                                <IconButton onClick={handleOptions}>
+                                <IconButton>
                                     <Menu style={{fontSize:'25px', color:'white'}}/>
                                 </IconButton>
                             </Box>

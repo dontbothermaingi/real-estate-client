@@ -12,7 +12,10 @@ function Houses ({filters,setHouseId,aim}){
     const isMobile = useMediaQuery('(max-width:1700px)')
 
     useEffect(()=>{
-        fetch("http://localhost:3000/houses")
+        fetch("http://127.0.0.1:9712/houses",{
+            method:'GET',
+            credentials:'include'
+        })
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -40,10 +43,7 @@ function Houses ({filters,setHouseId,aim}){
             (!filters.rooms || house.rooms === filters.rooms) &&
             (!filters.location || house.address === filters.location)
         );
-    }
-
-
-    
+    }    
 
     function handleId(id){
         setHouseId(id)
@@ -133,7 +133,8 @@ function Houses ({filters,setHouseId,aim}){
                                         key={index}
                                         onClick={() => handleId(house.id)}
                                         sx={{
-                                            backgroundImage: `url(${house.image})`, // Use `url()`
+                                            // Use `url()`
+                                            backgroundImage: `url(http://127.0.0.1:9712${house.photos[0].photo})`,
                                             backgroundSize: "cover", // Ensure the image covers the box
                                             backgroundPosition: "center", // Center the image
                                             width: "100%", // Adjust width as needed

@@ -9,8 +9,8 @@ function MobileLandingpage (){
 
     const navigate = useNavigate();
 
-    function handleProperties(){
-        navigate('/properties')
+    function handleProperties(aim){
+        navigate(`/properties/${aim}`)
     }
 
     return ( 
@@ -71,7 +71,7 @@ function MobileLandingpage (){
                         </Box>
     
                         <Box display={'flex'} alignItems={'center'} gap={'30px'} mt={'30px'}>
-                            <Button onClick={handleProperties} variant="contained" sx={{backgroundColor:'orange', ":hover":{backgroundColor:'white', color:'orange'}}}><Typography fontFamily={'GT Bold'} style={{padding:'5px', fontSize:'12px'}}>Find a house</Typography></Button>
+                            <Button onClick={() => handleProperties("Buy")} variant="contained" sx={{backgroundColor:'orange', ":hover":{backgroundColor:'white', color:'orange'}}}><Typography fontFamily={'GT Bold'} style={{padding:'5px', fontSize:'12px'}}>Find a house</Typography></Button>
                             <Button variant="contained" sx={{backgroundColor:'orange', ":hover":{backgroundColor:'white', color:'orange'} }}><Typography fontFamily={'GT Bold'} style={{padding:'5px', fontSize:'12px'}}>Learn More</Typography></Button>
                         </Box>
     

@@ -12,7 +12,7 @@ function DetailedProperty ({houseId, aim}){
     const [house, setHouse] = useState(null)
 
     useEffect(()=>{
-        fetch(` http://localhost:3000/houses/${houseId}`)
+        fetch(` http://127.0.0.1:9712/houses/${houseId}`)
         .then(response => response.json())
         .then((data) => {
             setHouse(data)
@@ -47,7 +47,7 @@ function DetailedProperty ({houseId, aim}){
                     <Box display={'flex'} gap={'20px'}>
                         <Box
                             sx={{
-                                backgroundImage: `url(${house.image})`, // Use `url()`
+                                backgroundImage: `url(http://127.0.0.1:9712/houses${house.photos.photo[1]})`, // Use `url()`
                                 backgroundSize: "cover", // Ensure the image covers the box
                                 backgroundPosition: "center", // Center the image
                                 width: "100%", // Adjust width as needed
@@ -58,7 +58,7 @@ function DetailedProperty ({houseId, aim}){
                             
                         </Box>
 
-                        <Box display={'flex'} flexDirection={'column'} gap={'30px'} width={'100%'}>
+                        {/* <Box display={'flex'} flexDirection={'column'} gap={'30px'} width={'100%'}>
                             <Box
                                 sx={{
                                     backgroundImage: `url(${house.image})`, // Use `url()`
@@ -83,7 +83,7 @@ function DetailedProperty ({houseId, aim}){
                             >
                                 
                             </Box>
-                        </Box>
+                        </Box> */}
                     </Box>
                     
 

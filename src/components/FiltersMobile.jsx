@@ -60,12 +60,6 @@ function FiltersMobile ({setFilters}){
         setRooms(rooms)
     }
 
-    console.log(location);
-    console.log(startingPrice);
-    console.log(endingPrice);
-    console.log(propertyType);
-    console.log(rooms);
-
     return ( 
         <Box sx={{backgroundColor:"#F4F5FC"}}>
 

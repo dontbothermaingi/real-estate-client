@@ -12,6 +12,7 @@ import Page2 from "./Page2";
 
 function PropertyDisplayMobile (){
 
+    const [pupose, setPupose] = useState("Buy")
     const [filters, setFilters] = useState({
         location: "",
         startingPrice: "",
@@ -24,8 +25,6 @@ function PropertyDisplayMobile (){
     const isTablet = useMediaQuery('(min-width:768px) and (max-width:1700px)')
 
 
-    console.log("From Property Display", filters.location);
-
     return ( 
 
         <Box>
@@ -33,7 +32,7 @@ function PropertyDisplayMobile (){
                 <Box sx={{backgroundColor:"#F4F5FC"}}>
 
                 <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
-                    <PropertyDisplayNavbar />
+                    <PropertyDisplayNavbar setPupose={setPupose}/>
                 </Box>
 
                 <Box paddingLeft={'50px'} paddingRight={'20px'} paddingTop={'40px'} gap={'20px'}>
@@ -61,7 +60,7 @@ function PropertyDisplayMobile (){
                                 '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
                             }}
                         >
-                            <Houses filters={filters} setHouseId={setHouseId}/>
+                            <Houses pupose={pupose} filters={filters} setHouseId={setHouseId}/>
                         </Box>
 
                         <Divider
@@ -96,7 +95,7 @@ function PropertyDisplayMobile (){
                  <Box sx={{backgroundColor:"#F4F5FC"}}>
 
                  <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
-                     <PropertyDisplayNavbar />
+                     <PropertyDisplayNavbar pupose={pupose} setPupose={setPupose}/>
                  </Box>
  
                  <Box paddingLeft={'20px'} paddingRight={'20px'} paddingTop={'40px'} display={'flex'} gap={'20px'} flexDirection={'column'}>
@@ -118,7 +117,7 @@ function PropertyDisplayMobile (){
                              '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
                          }}
                      >
-                         <HousesMobile filters={filters} setHouseId={setHouseId}/>
+                         <HousesMobile pupose={pupose} filters={filters} setHouseId={setHouseId}/>
                      </Box>
  
                      {/* <Box 

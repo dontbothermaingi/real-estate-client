@@ -24,27 +24,6 @@ function NavBar(){
         handleChangeIcon('buy')
     }
 
-    function handleRent(aim){
-        navigate(`/properties/${aim}`)
-        handleChangeIcon('rent')
-    }
-
-    function handleProjects(){
-        handleChangeIcon('projects')
-    }
-
-    function handleArea(){
-        handleChangeIcon('area')
-    }
-
-    function handleServices(){
-        handleChangeIcon('services')
-    }
-
-    function handleBlogs(){
-        handleChangeIcon('blogs')
-    }
-
     function handleOptions(){
         navigate("/options")
     }
@@ -114,7 +93,7 @@ function NavBar(){
                                 </FormControl>
                             </Box>
                             <Box>
-                                <IconButton onClick={handleOptions}>
+                                <IconButton>
                                     <Menu style={{fontSize:'25px', color:'black'}}/>
                                 </IconButton>
                             </Box>
@@ -134,12 +113,7 @@ function NavBar(){
                         transition={{ ease: "circInOut", duration: 1.9, type:'spring', }}
                     >
                         <Box sx={{display:'flex', flexDirection:'row', alignItems:"center", gap:"80px"}}>
-                            {navBarOption("Buy","buy", () => handleBuy('Buy'))}
-                            {navBarOption("Rent", "rent", () => handleRent('Rent'))}
-                            {/* {navBarOption("Projects", "projects", handleProjects)} */}
-                            {/* {navBarOption("Area", "area", handleArea)} */}
-                            {/* {navBarOption("Services", "services", handleServices)} */}
-                            {/* {navBarOption("Blogs", "blogs", handleBlogs)} */}
+                            {navBarOption("View Properties","buy", () => handleBuy('Buy'))}
                         </Box>
                     </motion.div>
 

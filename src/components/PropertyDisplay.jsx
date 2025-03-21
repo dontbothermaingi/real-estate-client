@@ -24,8 +24,6 @@ function PropertyDisplay (){
 
     const [houseId, setHouseId] = useState(1)
 
-    console.log("From Property Display", filters.location);
-
     return ( 
         <Box>
             {isMobile ? (

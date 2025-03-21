@@ -2,18 +2,14 @@ import { Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Table,
 import { useRef, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import AddHouseMobile from "./AddHouseMobile";
-import { Add, DeleteForever } from "@mui/icons-material";
+import { DeleteForever } from "@mui/icons-material";
 import AddOutlined from "@mui/icons-material/AddOutlined";
 
 
 function AddHouse (){
 
-    const [file,setFile] = useState();
+    const [filePreview,setFilePreview] = useState();
     const fileUploadRef = useRef();
 
     const isMobile = useMediaQuery('(max-width:768px)');
@@ -56,20 +52,22 @@ function AddHouse (){
     function handlePhotoChange(event) {
         const file = event.target.files[0]; 
 
-        setFile(URL.createObjectURL(file));
+        setFilePreview(URL.createObjectURL(file));
 
         if (file) {
             setPhotoData((prevPhotoData) => ({
                 ...prevPhotoData,
                 photo: file,
-                preview: URL.createObjectURL(file),
+                preview:URL.createObjectURL(file),
             })
         );
-        }
+
+    }
 
         // Reset input field
         event.target.value = "";
     }
+    
     
 
     // Function to handle the update of description input field
@@ -77,6 +75,11 @@ function AddHouse (){
         const values = [...descriptionData]
         values[index].description = event.target.value;
         setDescriptionData(values);
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            descriptions:descriptionData
+        }))
     }
 
     // Function to handle adding new description inputfields
@@ -91,12 +94,16 @@ function AddHouse (){
         setDescriptionData(newDescriptionField);
     }
 
-    // Function to handle the update of an amenity input field
-    function handleAmenityChange(event,index){
-        const values = [...amenityData];
+    function handleAmenityChange(event,index) {
+        const values = [...amenityData]
         values[index].amenity = event.target.value;
         setAmenityData(values);
-    }
+
+        setFormData(prevData => ({
+            ...prevData,
+            amenities: amenityData
+        }));
+    }    
 
     // function to handle the addition of input fields
     function handleNewAmenityInputField(){
@@ -119,11 +126,9 @@ function AddHouse (){
 
         // Clear input after adding
         setPhotoData({ photo: "", preview: "" });
-        setFile("");
+        setFilePreview("");
 
     }
-
-    console.log(formData.photos)
 
     function DeletePhoto(index){
         setFormData(prevFormData => ({
@@ -135,51 +140,77 @@ function AddHouse (){
 
     function handleSubmit(event){
 
-        event.preventDefault();
+        event.preventDefault();    
 
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            descriptions:[...prevFormData.descriptions, descriptionData],
-            amenities:[...prevFormData.amenities, amenityData],
-        }))
+        const formDataToSend = new FormData();
 
-        console.log(formData.amenities)
+        // Append non-file form data
+        formDataToSend.append("location", formData.location);
+        formDataToSend.append("address", formData.address);
+        formDataToSend.append("purpose", formData.purpose);
+        formDataToSend.append("price", formData.price);
+        formDataToSend.append("beds", formData.beds);
+        formDataToSend.append("bathrooms", formData.bathrooms);
+        formDataToSend.append("square_feet", formData.square_feet);
+        formDataToSend.append("property_type", formData.property_type);
+        formDataToSend.append("furnishing", formData.furnishing);
+        formDataToSend.append("propertyId", formData.propertyId);
+        formDataToSend.append("completion", formData.completion);
+        formDataToSend.append("year_built", formData.year_built);
 
-        // fetch("url",{
-        //     method:"POST",
-        //     headers:{
-        //         "Content-Type":"application/json"
-        //     },
-        //     body:JSON.stringify(formData)
-        // })
-        // .then(response => {
-        //     if(!response.ok){
-        //         throw new Error('Network response was not ok')
-        //     }
-        //     return response.json();
-        // })
-        // .then((data) => {
+        formDataToSend.append("descriptions", JSON.stringify([...formData.descriptions]));
+        formDataToSend.append("amenities", JSON.stringify([...formData.amenities]))
+        
+        if (formData.photos && formData.photos.length > 0){
+            formData.photos.forEach(photoObject => {
+                if(photoObject.photo instanceof File){
+                    formDataToSend.append('photos', photoObject.photo)
+                }else {
+                    console.error("Invalid photo file:", photoObj.photo);
+                }
+            })
+        }
 
-        //     setFormData({
-        //         location:"",
-        //         address:"",
-        //         purpose:"",
-        //         price:"",
-        //         beds:"",
-        //         bathrooms:"",
-        //         square_feet:"",
-        //         property_type:"",
-        //         furnishing:"",
-        //         propertyId:"",
-        //         completion:"",
-        //         year_built:"",
-        //         descriptions:[],
-        //         amenities:[],
-        //     })
-        // })
-        // .catch((error) => {
-        //     console.error('Error with stock update operations:', error);
-        // })
+        // console.log(amenityData)
+        console.log(formData)
+
+
+        fetch("http://127.0.0.1:9712/houses",{
+            method:"POST",
+            credentials: 'include',
+            body:formDataToSend
+        })
+        .then(response => {
+            if(!response.ok){
+                return response.text().then(text => {
+                    throw new Error(`Network response was not ok: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+
+            setFormData({
+                location:"",
+                address:"",
+                purpose:"",
+                price:"",
+                beds:"",
+                bathrooms:"",
+                square_feet:"",
+                property_type:"",
+                furnishing:"",
+                propertyId:"",
+                completion:"",
+                year_built:"",
+                descriptions:[],
+                amenities:[],
+                photos:[],
+            })
+        })
+        .catch((error) => {
+            console.error('Error with stock update operations:', error);
+        })
     }
 
     const locations = [
@@ -270,7 +301,6 @@ function AddHouse (){
                                         <TableRow key={index}>
                                             <TableCell>
                                                 {photo.preview ? (
-
                                                     <Box
                                                         width={'600px'} 
                                                         height={'300px'} 
@@ -326,9 +356,9 @@ function AddHouse (){
                                                 }}
                                             >
                                                 {/* Show uploaded image if available */}
-                                                {file ? (
+                                                {filePreview ? (
                                                     <img 
-                                                        src={file}
+                                                        src={filePreview}
                                                         alt="Uploaded Preview"
                                                         style={{
                                                             width: "100%",
@@ -358,7 +388,7 @@ function AddHouse (){
                                                 )}
                                             </Box>
 
-                                            {file && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
+                                            {filePreview && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
                                         </Box>
 
                                         {/* Hidden File Input */}
@@ -475,13 +505,14 @@ function AddHouse (){
 
                             <Box display={'flex'} flexDirection={'column'}>
                                 <Typography fontFamily={"GT Medium"} fontSize={'20px'} color="black">Year Built</Typography>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        value={formData.year_built ? dayjs(formData.year_built) : null}
-                                        onChange={handleChange}
-                                        renderInput={(params) => <TextField {...params} variant="outlined" sx={{ mb: "20px" }} />}
-                                    />
-                                </LocalizationProvider>
+                                <TextField 
+                                    type="date"
+                                    name="year_built"
+                                    value={formData.year_built}
+                                    onChange={handleChange}
+                                    variant="outlined"
+                                    sx={{mb:'20px'}}
+                                />
                             </Box>
                         </Box>
 
@@ -619,7 +650,7 @@ function AddHouse (){
                                         name="amenity"
                                         variant="outlined"
                                         placeholder={'Amenity'}
-                                        onChange={(e) => handleAmenityChange(e, index)}
+                                        onChange={(e) => handleAmenityChange(e,index)}
                                     />
 
                                     <IconButton onClick={() => DeleteAmenity(index)}>
