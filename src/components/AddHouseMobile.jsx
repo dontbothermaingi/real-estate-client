@@ -163,7 +163,7 @@ function AddHouseMobile (){
             })
         }
 
-        fetch("http://127.0.0.1:9712/houses",{
+        fetch("https://real-estate-server-0d4s.onrender.com/houses",{
             method:"POST",
             credentials:'include',
             body:formDataToSend

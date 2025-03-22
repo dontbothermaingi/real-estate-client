@@ -43,7 +43,7 @@ function EditHouse (){
     })
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:9712/house/${houseId}`)
+        fetch(`https://real-estate-server-0d4s.onrender.com/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
 
@@ -205,7 +205,7 @@ function EditHouse (){
 
         console.log(formData)
 
-        fetch(`http://127.0.0.1:9712/house/${houseId}`,{
+        fetch(`https://real-estate-server-0d4s.onrender.com/house/${houseId}`,{
             method:"PATCH",
             credentials: 'include',
             body:formDataToSend

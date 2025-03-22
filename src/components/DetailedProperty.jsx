@@ -22,7 +22,7 @@ function DetailedProperty ({houseId, aim, pupose}){
     const [checked, setChecked] = useState(false)
 
     useEffect(()=>{
-        fetch(` http://127.0.0.1:9712/house/${houseId}`)
+        fetch(` https://real-estate-server-0d4s.onrender.com/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
             setHouse(data)
@@ -84,7 +84,7 @@ function DetailedProperty ({houseId, aim, pupose}){
                         <Box display={'flex'} gap={'20px'}>
                             <Box
                                 sx={{
-                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                    backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -259,7 +259,7 @@ function DetailedProperty ({houseId, aim, pupose}){
                         <Box display={'flex'} gap={'20px'}>
                             <Box
                                 sx={{
-                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                    backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -434,7 +434,7 @@ function DetailedProperty ({houseId, aim, pupose}){
                             <Box display={'flex'} gap={'20px'}>
                                 <Box
                                     sx={{
-                                        backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                        backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                         backgroundSize: "cover", // Ensure the image covers the box
                                         backgroundPosition: "center", // Center the image
                                         width: "100%", // Adjust width as needed
@@ -707,7 +707,7 @@ function DetailedProperty ({houseId, aim, pupose}){
                             <Box display={'flex'} gap={'20px'}>
                                 <Box
                                     sx={{
-                                        backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                        backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                         backgroundSize: "cover", // Ensure the image covers the box
                                         backgroundPosition: "center", // Center the image
                                         width: "100%", // Adjust width as needed

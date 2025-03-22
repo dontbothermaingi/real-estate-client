@@ -10,7 +10,7 @@ function HousesMobile ({filters,pupose}){
     const navigate = useNavigate()
 
     useEffect(()=>{
-        fetch("http://127.0.0.1:9712/houses")
+        fetch("https://real-estate-server-0d4s.onrender.com/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -61,7 +61,7 @@ function HousesMobile ({filters,pupose}){
                                 key={index}
                                 onClick={() => handleHouseDetails(house.id,"Buy")}
                                 sx={{
-                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                    backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -124,7 +124,7 @@ function HousesMobile ({filters,pupose}){
                                 key={index}
                                 onClick={() => handleHouseDetails(house.id)}
                                 sx={{
-                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                    backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
