@@ -1,18 +1,32 @@
 import LocationOn from "@mui/icons-material/LocationOn";
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, IconButton, InputAdornment, Snackbar, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import "./universal.css"
 import { useNavigate, useParams } from "react-router";
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
-import { ArrowBack, Bed, CalendarMonth, CheckCircle, Shower, ZoomOutMap } from "@mui/icons-material";
+import { AccountCircle, ArrowBack, Bed, CalendarMonth, CheckCircle, EmailOutlined, Person, Shower, ZoomOutMap } from "@mui/icons-material";
+import Phone from "@mui/icons-material/Phone";
+import ImageGallery from "./ImageGallery";
 
 function DetailedPropertyMobile (){
     const [house, setHouse] = useState(null)
     const {houseId,aim} = useParams()
     const navigate = useNavigate()
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [message, setMessage] = useState("")
+    const [openSnackBar, setOpenSnackBar] = useState(false)
+    const [successMessage, setSuccessMessage] = useState("")
+    const [checked, setChecked] = useState(false)
+
+    const handleChange = () => {
+        setChecked((prev) => !prev);
+      };
+    
 
     useEffect(()=>{
-        fetch(` http://localhost:3000/houses/${houseId}`)
+        fetch(` http://127.0.0.1:9712/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
             setHouse(data)
@@ -39,25 +53,60 @@ function DetailedPropertyMobile (){
         navigate(`/properties/${aim}`)
     }
 
+    function handleCloseSnackBar(event, reason){
+        if(reason === 'clickaway') return;
+        setOpenSnackBar(false)
+    }
+
+    function handleSubmit(e){
+        e.preventDefault()
+
+        if(!name || !email || !phoneNumber || !message){
+            setOpenSnackBar(true)
+            setSuccessMessage("Please fill in all the fieds!")
+        }else{
+            setOpenSnackBar(true)
+            setSuccessMessage("Request was successfull")   
+            setName("")
+            setEmail("")
+            setPhoneNumber("")
+            setMessage("")
+        }
+    }
+
     return ( 
         <Box>
             <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
                 <PropertyDisplayNavbar />
             </Box>
 
+            <Snackbar
+                onClose={handleCloseSnackBar}
+                autoHideDuration={6000}
+                anchorOrigin={{horizontal:'center', vertical:'bottom'}}
+                open={openSnackBar}
+            >
+                <Alert onClose={handleCloseSnackBar} severity={successMessage.startsWith("Please") ? "error":"success"}>
+                    {successMessage}
+                </Alert>
+            </Snackbar>
+
             {aim === 'Buy' ? (
                 <Box>
-                <Box>
-                    <Box
-                        sx={{
-                            backgroundImage: `url(${house.image})`, // Use `url()`
-                            backgroundSize: "cover", // Ensure the image covers the box
-                            backgroundPosition: "center", // Center the image
-                            width: "100%", // Adjust width as needed
-                            height: "500px", // Adjust height as needed
-                            padding:'10px'
-                        }}
-                    >
+                    <Box>
+                        <Box
+                            sx={{
+                                backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                backgroundSize: "cover", // Ensure the image covers the box
+                                backgroundPosition: "center", // Center the image
+                                width: "100%", // Adjust width as needed
+                                height: "500px", // Adjust height as needed
+                                paddingTop:'10px',
+                                position:'relative'
+                            }}
+                        >
+
+                        <Button onClick={handleChange} variant="contained" sx={{backgroundColor:'white', color:'black', borderRadius:'15px', position:'absolute', bottom:20, right:20}}><Typography fontSize={'14px'} fontFamily={"GT Bold"}>{checked ? "Hide": "Show all images"}</Typography></Button>
 
                         <Box 
                             onClick={() => handleProperties('Buy')}
@@ -65,7 +114,8 @@ function DetailedPropertyMobile (){
                                 backgroundColor:'white',
                                 borderRadius:'13px',
                                 width:"90px",
-                                cursor:'pointer'
+                                cursor:'pointer',
+                                ml:'10px'
                             }}
                         >
                             <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
@@ -78,22 +128,17 @@ function DetailedPropertyMobile (){
 
                     </Box>
                 </Box>
+
+                <Box>
+                    {checked && <ImageGallery images={house?.photos || []} /> }
+                </Box>
                 
                 <Box display={'flex'} flexDirection={'column'} padding={'20px'}>
                     <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Price</Typography>
                     <Box display={'grid'} gridTemplateColumns={{xs:'repeat(2, 1fr)'}} gap={'10px'} mt={'10px'} >
                         <Box>
-                            {/* <Typography fontFamily={'GT Light'} color="black">1 Day Rental:</Typography> */}
                             <Typography fontSize={'30px'} fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}</Typography>
                         </Box>
-                        {/* <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">Week Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                        </Box>
-                        <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">Month Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                        </Box> */}
                     </Box>
 
                 </Box>
@@ -101,12 +146,12 @@ function DetailedPropertyMobile (){
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px'}}/>
 
                 <Box mt={'30px'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.address}</Typography>
+                    <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.location}</Typography>
                     <Box display={'flex'} alignItems={'center'} gap={'0px'} ml={'-13px'}>
                         <IconButton>
                             <LocationOn sx={{color:'black'}}/>
                         </IconButton>
-                        <Typography fontFamily={'GT Light'} fontSize={'16px'} color="black">{house.age}</Typography>
+                        <Typography fontFamily={'GT Light'} fontSize={'16px'} color="black">{house.address}</Typography>
                     </Box>
                 </Box>
 
@@ -121,7 +166,7 @@ function DetailedPropertyMobile (){
                             <IconButton>
                                 <Bed style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
-                            <Typography fontFamily={'GT Regular'} color="black">2</Typography>
+                            <Typography fontFamily={'GT Regular'} color="black">{house.beds}</Typography>
                         </Box>
                     </Box>
 
@@ -133,7 +178,7 @@ function DetailedPropertyMobile (){
                             <IconButton>
                                 <Shower style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
-                            <Typography fontFamily={'GT Regular'} color="black">4</Typography>
+                            <Typography fontFamily={'GT Regular'} color="black">{house.bathrooms}</Typography>
                         </Box>
                     </Box>
 
@@ -145,7 +190,7 @@ function DetailedPropertyMobile (){
                             <IconButton>
                                 <ZoomOutMap style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
-                            <Typography fontFamily={'GT Regular'} color="black">416 sq ft</Typography>
+                            <Typography fontFamily={'GT Regular'} color="black">{house.square_feet}</Typography>
                         </Box>
                     </Box>
 
@@ -153,11 +198,11 @@ function DetailedPropertyMobile (){
                         <Box>
                             <Typography fontFamily={'GT Regular'} color="black">Year Built</Typography>
                         </Box>
-                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'120px'} height={'25px'} justifyContent={'center'}>
+                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'130px'} height={'25px'} justifyContent={'center'}>
                             <IconButton>
                                 <CalendarMonth style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
-                            <Typography fontFamily={'GT Regular'} color="black">2019</Typography>
+                            <Typography fontFamily={'GT Regular'} color="black">{house.year_built}</Typography>
                         </Box>
                     </Box>
 
@@ -173,10 +218,6 @@ function DetailedPropertyMobile (){
                         gridTemplateColumns={{xs:'repeat(1, 1fr)', md:'repeat(2, 1fr)', sm:'repeat(3, 1fr)'}} 
                         mt={'10px'} 
                         gap={'10px'}
-                        // display="grid"
-                        // gridTemplateColumns={{ xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)", md: "repeat(2, 1fr)" }}
-                        // gap="10px"
-                        // mt="10px"
                     >
                         <Box display={'flex'} alignItems={'center'} gap={'10px'} mt={'10px'} border="1px solid #ddd" padding="10px">
                             <Typography fontFamily={"GT Medium"} color="black" fontSize={'16px'}>Property Type</Typography>
@@ -185,22 +226,22 @@ function DetailedPropertyMobile (){
 
                         <Box display={'flex'} alignItems={'center'} gap={'10px'} mt={'10px'} border="1px solid #ddd" padding="10px">
                             <Typography fontFamily={"GT Medium"} color="black" fontSize={'16px'}>Completion</Typography>
-                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>Completed</Typography>
+                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>{house.completion}</Typography>
                         </Box>
 
                         <Box display={'flex'} alignItems={'center'} gap={'10px'} mt={'10px'} border="1px solid #ddd" padding="10px">
                             <Typography fontFamily={"GT Medium"} color="black" fontSize={'16px'}>Purpose</Typography>
-                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>For Sale</Typography>
+                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>{house.purpose}</Typography>
                         </Box>
 
                         <Box display={'flex'} alignItems={'center'} gap={'10px'} mt={'10px'} border="1px solid #ddd" padding="10px">
                             <Typography fontFamily={"GT Medium"} color="black" fontSize={'16px'}>Property ID</Typography>
-                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>PES-0603253</Typography>
+                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>{house.propertyId}</Typography>
                         </Box>
 
                         <Box display={'flex'} alignItems={'center'} gap={'10px'} mt={'10px'} border="1px solid #ddd" padding="10px">
                             <Typography fontFamily={"GT Medium"} color="black" fontSize={'16px'}>Furnishing</Typography>
-                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>Fully Furnished</Typography>
+                            <Typography fontFamily={"GT Light"} color="black" fontSize={'16px'}>{house.furnishing}</Typography>
                         </Box>
 
 
@@ -209,13 +250,12 @@ function DetailedPropertyMobile (){
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px', marginTop:'10px'}}/>
 
-                <Box display={'flex'} flexDirection={'column'} gap={'20px'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Description</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Immerse yourself in the unparalleled luxury and equestrian elegance of Al Habtoor Polo Resort & Club, ideally located in the heart of Dubailand. This exquisite 3-bedroom villa seamlessly blends contemporary design, comfort, and sophistication. With sweeping views of the pristine polo fields and a 5-star hotel at its center, this villa offers a rare opportunity to live in Dubai’s premier equestrian community.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Sophisticated Design: Featuring an open-plan living area, three elegantly designed bedrooms, and premium finishes throughout, this villa exudes comfort and style. Its layout is thoughtfully crafted for both relaxed living and effortless entertaining.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Prime Location & Polo Field Views: Revel in breathtaking panoramic views of the polo fields right from the comfort of your home. Expansive windows flood the villa with natural light, offering serene vistas of lush greenery and live polo action at your doorstep.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black"></Typography>
-                </Box>
+                <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'} paddingLeft={'20px'} paddingRight={'20px'} paddingTop={'20px'}>Description</Typography>
+                {house.descriptions.map((description, index) => (
+                    <Box display={'flex'} flexDirection={'column'} gap={'20px'} padding={'20px'}>
+                        <Typography fontFamily={'GT Light'} color="black" key={index}>{description.description}</Typography>
+                    </Box>
+                ))}
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px', marginTop:'10px'}}/>
 
@@ -227,60 +267,167 @@ function DetailedPropertyMobile (){
                         mt={'10px'}
                         gap={'20px'}
                     >
-                        {amenities.map((amenity,index) => (
-                            <Box key={index} display={'flex'} alignItems={'center'} gap={'7px'}>
+                        {house.amenities.map((amenity,index) => (
+                            <Box display={'flex'} alignItems={'center'} gap={'7px'}>
                                  <CheckCircle style={{color:'black'}}/>
-                                 <Typography color="black" fontFamily={"GT Light"}>{amenity}</Typography>
+                                 <Typography color="black" fontFamily={"GT Light"} key={index}>{amenity.amenity}</Typography>
                             </Box>
                         ))}
 
                     </Box>
                 </Box>
 
-                <Box></Box>
+                <Box padding={'10px'} >
+                    <Typography fontFamily={"GT Medium"} color="black" padding={'10px'} fontSize={'24px'}>Interested? Fill in the form.</Typography>
+                    <Box sx={{border:'2px #ddd solid', padding:'10px'}} display={'flex'} flexDirection={'column'}>
+                        {/* Consultant Image */}
+                        <Box display={'flex'} alignItems={'center'} justifyContent={'center'} marginTop={'20px'} marginBottom={'20px'}>
+                            <Box>
+                                <IconButton>
+                                    <Person style={{color:'black', fontSize:'50px'}}/>
+                                </IconButton>
+                            </Box>
+
+                            <Box>
+                                <Typography fontFamily={"GT Medium"} color="black" fontSize={'14px'}>James Carter</Typography>
+                                <Typography fontFamily={"GT Light"} color="black" fontSize={'14px'}>Consultant - secondary sales.</Typography>
+                            </Box>
+                            
+                        </Box>
+
+                        {/* Form */}
+                        <Box>
+
+                            <form style={{display:'flex', flexDirection:'column'}} onSubmit={handleSubmit}>
+                                <TextField
+                                    name="name"
+                                    value={name}
+                                    type="text"
+                                    onChange={(e) => setName(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    style={{fontFamily:'GT Medium'}}
+                                    label='Name'
+                                    variant="outlined"
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <AccountCircle />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="email"
+                                    value={email}
+                                    type="text"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Email'
+                                    variant="outlined"
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <EmailOutlined />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="phoneNumber"
+                                    value={phoneNumber}
+                                    type="text"
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Phone Number'
+                                    variant="outlined"
+                                    helperText="* Include country code."
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <Phone />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="message"
+                                    value={message}
+                                    type="text"
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Message'
+                                    variant="outlined"
+                                    multiline
+                                    minRows={4}
+                                    maxRows={30}
+                                    fullWidth
+                                    
+                                />
+
+                                <Button type="submit" variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={"GT Bold"}>Request Information</Typography></Button>
+                            </form>
+                        </Box>
+
+                    </Box>
+                </Box>
             </Box>
             ):(
                 <Box>
-                <Box>
-                    <Box
-                        sx={{
-                            backgroundImage: `url(${house.image})`, // Use `url()`
-                            backgroundSize: "cover", // Ensure the image covers the box
-                            backgroundPosition: "center", // Center the image
-                            width: "100%", // Adjust width as needed
-                            height: "500px", // Adjust height as needed
-                            padding:'10px'
-                        }}
-                    >
-
-                        <Box 
-                            onClick={() => handleProperties('Buy')}
+                    <Box>
+                        <Box
                             sx={{
-                                backgroundColor:'white',
-                                borderRadius:'13px',
-                                width:"90px",
-                                cursor:'pointer'
+                                backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
+                                backgroundSize: "cover", // Ensure the image covers the box
+                                backgroundPosition: "center", // Center the image
+                                width: "100%", // Adjust width as needed
+                                height: "500px", // Adjust height as needed
+                                paddingTop:'10px',
+                                position:'relative'
                             }}
                         >
-                            <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                                <IconButton>
-                                    <ArrowBack style={{color:'black', fontSize:"14px"}}/>
-                                </IconButton>
-                                <Typography fontFamily={'GT Bold'} color="black" fontSize={'14px'}>Back</Typography>
-                            </Box>
-                        </Box>
+                                    <Button onClick={handleChange} variant="contained" sx={{backgroundColor:'white', color:'black', borderRadius:'15px', position:'absolute', bottom:20, right:20}}><Typography fontSize={'14px'} fontFamily={"GT Bold"}>{checked ? "Hide": "Show all images"}</Typography></Button>
 
+                            <Box 
+                                onClick={() => handleProperties('Buy')}
+                                sx={{
+                                    backgroundColor:'white',
+                                    borderRadius:'13px',
+                                    width:"90px",
+                                    cursor:'pointer',
+                                    ml:'10px'
+                                }}
+                            >
+                                <Box display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                                    <IconButton>
+                                        <ArrowBack style={{color:'black', fontSize:"14px"}}/>
+                                    </IconButton>
+                                    <Typography fontFamily={'GT Bold'} color="black" fontSize={'14px'}>Back</Typography>
+                                </Box>
+                            </Box>
+
+                        </Box>
                     </Box>
-                </Box>
-                
+
+                    <Box>
+                        {checked && <ImageGallery images={house?.photos || []} /> }
+                    </Box>
 
                 <Box mt={'30px'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.address}</Typography>
+                    <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.location}</Typography>
                     <Box display={'flex'} alignItems={'center'} gap={'0px'} ml={'-13px'}>
                         <IconButton>
                             <LocationOn sx={{color:'black'}}/>
                         </IconButton>
-                        <Typography fontFamily={'GT Light'} fontSize={'16px'} color="black">{house.age}</Typography>
+                        <Typography fontFamily={'GT Light'} fontSize={'16px'} color="black">{house.address}</Typography>
                     </Box>
                 </Box>
 
@@ -290,16 +437,8 @@ function DetailedPropertyMobile (){
                     <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Price</Typography>
                     <Box display={'grid'} gridTemplateColumns={{xs:'repeat(2, 1fr)'}} gap={'10px'} mt={'10px'} >
                         <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">1 Day Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                        </Box>
-                        <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">Week Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                        </Box>
-                        <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">Month Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
+                            <Typography fontFamily={'GT Light'} color="black">Monthly Rental:</Typography>
+                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>month</span></Typography>
                         </Box>
                     </Box>
 
@@ -336,7 +475,7 @@ function DetailedPropertyMobile (){
                         <Box>
                             <Typography fontFamily={'GT Regular'} color="black">Unit</Typography>
                         </Box>
-                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'120px'} height={'25px'} justifyContent={'center'}>
+                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'130px'} height={'25px'} justifyContent={'center'}>
                             <IconButton>
                                 <ZoomOutMap style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
@@ -348,7 +487,7 @@ function DetailedPropertyMobile (){
                         <Box>
                             <Typography fontFamily={'GT Regular'} color="black">Year Built</Typography>
                         </Box>
-                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'120px'} height={'25px'} justifyContent={'center'}>
+                        <Box display={'flex'} flexDirection={'row'} alignItems={"center"} gap={'3px'} border={"1px solid #ddd"} borderRadius={'8px'} padding={'5px'} width={'140px'} height={'25px'} justifyContent={'center'}>
                             <IconButton>
                                 <CalendarMonth style={{fontSize:'20px', color:'black'}}/>
                             </IconButton>
@@ -432,7 +571,108 @@ function DetailedPropertyMobile (){
                     </Box>
                 </Box>
 
-                <Box></Box>
+                <Box padding={'10px'} >
+                    <Typography fontFamily={"GT Medium"} color="black" padding={'10px'} fontSize={'24px'}>Interested? Fill in the form.</Typography>
+                    <Box sx={{border:'2px #ddd solid', padding:'10px'}} display={'flex'} flexDirection={'column'}>
+                        {/* Consultant Image */}
+                        <Box display={'flex'} alignItems={'center'} justifyContent={'center'} marginTop={'20px'} marginBottom={'20px'}>
+                            <Box>
+                                <IconButton>
+                                    <Person style={{color:'black', fontSize:'50px'}}/>
+                                </IconButton>
+                            </Box>
+
+                            <Box>
+                                <Typography fontFamily={"GT Medium"} color="black" fontSize={'14px'}>James Carter</Typography>
+                                <Typography fontFamily={"GT Light"} color="black" fontSize={'14px'}>Consultant - secondary sales.</Typography>
+                            </Box>
+                            
+                        </Box>
+
+                        {/* Form */}
+                        <Box>
+
+                            <form style={{display:'flex', flexDirection:'column'}} onSubmit={handleSubmit}>
+                                <TextField
+                                    name="name"
+                                    value={name}
+                                    type="text"
+                                    onChange={(e) => setName(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    style={{fontFamily:'GT Medium'}}
+                                    label='Name'
+                                    variant="outlined"
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <AccountCircle />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="email"
+                                    value={email}
+                                    type="text"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Email'
+                                    variant="outlined"
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <EmailOutlined />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="phoneNumber"
+                                    value={phoneNumber}
+                                    type="text"
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Phone Number'
+                                    variant="outlined"
+                                    helperText="* Include country code."
+                                    slotProps={{
+                                        input: {
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              <Phone />
+                                            </InputAdornment>
+                                          ),
+                                        },
+                                    }}
+                                />
+
+                                <TextField
+                                    name="message"
+                                    value={message}
+                                    type="text"
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    sx={{mb:'20px'}}
+                                    label='Message'
+                                    variant="outlined"
+                                    multiline
+                                    minRows={4}
+                                    maxRows={30}
+                                    fullWidth
+                                    
+                                />
+
+                                <Button type="submit" variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={"GT Bold"}>Request Information</Typography></Button>
+                            </form>
+                        </Box>
+
+                    </Box>
+                </Box>
             </Box>
             )}
             

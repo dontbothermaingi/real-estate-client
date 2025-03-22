@@ -19,7 +19,7 @@ function PropertyDisplay (){
         startingPrice: "",
         endingPrice: "",
         propertyType: "",
-        rooms: "",
+        beds: "",
     });
 
     const [houseId, setHouseId] = useState(1)

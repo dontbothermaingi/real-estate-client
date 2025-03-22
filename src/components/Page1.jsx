@@ -1,4 +1,4 @@
-import { Box, Divider, IconButton, Typography } from "@mui/material";
+import { Box,Typography } from "@mui/material";
 import './universal.css'
 
 function Page1 (){

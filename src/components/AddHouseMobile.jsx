@@ -1,20 +1,13 @@
-import { Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, FormControl, IconButton, MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
+import { AddOutlined, Delete } from "@mui/icons-material";
 
 
 function AddHouseMobile (){
 
-    const [descriptionCounter, setDescriptionCounter] = useState(1);
-    const decsriptionLabel = `Despription Paragraph ${descriptionCounter}`;
-    const[amenityCounter, setAmenityCounter] = useState(1);
-    const amenityLabel = `Amenity ${amenityCounter}`;
-    const [file,setFile] = useState();
+    const [filePreview,setFilePreview] = useState();
     const fileUploadRef = useRef();
     
     const [formData, setFormData] = useState({
@@ -35,13 +28,9 @@ function AddHouseMobile (){
         photos:[],
     })
 
-    const [descriptionData, setDescriptionData] = useState({
-        description:"",
-    })
+    const [descriptionData, setDescriptionData] = useState([{description:"",}])
 
-    const [amenityData, setAmenityData] = useState({
-        amenity:"",
-    })
+    const [amenityData, setAmenityData] = useState([{amenity:"",}])
 
     const [photoData, setPhotoData] = useState({
         photo:"",
@@ -59,7 +48,7 @@ function AddHouseMobile (){
     function handlePhotoChange(event) {
         const file = event.target.files[0]; 
 
-        setFile(URL.createObjectURL(file));
+        setFilePreview(URL.createObjectURL(file));
 
         if (file) {
             setPhotoData((prevPhotoData) => ({
@@ -75,62 +64,47 @@ function AddHouseMobile (){
     }
     
 
-    function handleDescriptionChange(event){
-        const{name,value} = event.target
-
-        setDescriptionData(prevDescriptionData => ({
-            ...prevDescriptionData,
-            [name]:value,
-        }))
-    }
-
-    function handleAmenityChange(event){
-        const{name,value} = event.target
-
-        setAmenityData(prevAmenityData => ({
-            ...prevAmenityData,
-            [name]:value,
-        }))
-    }
-
-    function AddDescription(){
+    function handleDescriptionChange(event, index){
+        const values = [...descriptionData]
+        values[index].description = event.target.value
+        setDescriptionData(values);
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            descriptions:[...prevFormData.descriptions, descriptionData]
+            descriptions:descriptionData
         }))
+    }
 
-        setDescriptionCounter(prevDescriptionCounter => prevDescriptionCounter + 1 )
+    function handleAmenityChange(event,index){
+        const values = [...amenityData]
+        values[index].amenity = event.target.value
+        setAmenityData(values)
+
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            amenities:amenityData
+        }))
+    }
+
+    function newDescriptionInputField(){
+        setDescriptionData([...descriptionData, {description:""}])
     }
 
     function DeleteDescription(index){
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            descriptions: prevFormData.descriptions.filter((_,i) => i !== index)
-        }))
-
-        setDescriptionCounter(prevDescriptionCounter => prevDescriptionCounter + 1 )
+        const newDescriptionField = [...descriptionData];
+        newDescriptionField.splice(index , 1);
+        setDescriptionData(newDescriptionField);
 
     }
 
-    function AddAmenity(){
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            amenities:[...prevFormData.amenities, amenityData]
-        }))
-
-        setAmenityCounter(prevAmenityCounter => prevAmenityCounter + 1);
+    function newAmenityInputField(){
+        setAmenityData([...amenityData, {amenity:""}])
     }
 
     function DeleteAmenity(index){
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            amenities: prevFormData.amenities.filter((_,i) => i !== index)
-        }))
-
-        setAmenityCounter(prevAmenityCounter => prevAmenityCounter - 1);
-
+        const newAmenityField = [...amenityData];
+        newAmenityField.splice(index , 1);
+        setAmenityData(newAmenityField);
     }
 
     function AddPhoto(){
@@ -142,7 +116,7 @@ function AddHouseMobile (){
 
         // Clear input after adding
         setPhotoData({ photo: "", preview: "" });
-        setFile("");
+        setFilePreview("");
 
     }
 
@@ -156,13 +130,43 @@ function AddHouseMobile (){
 
     }
 
-    function handleSubmit(){
-        fetch("url",{
+    function handleSubmit(event){
+
+        event.preventDefault()
+
+        const formDataToSend = new FormData();
+
+        // Append non-file form data
+        formDataToSend.append("location", formData.location);
+        formDataToSend.append("address", formData.address);
+        formDataToSend.append("purpose", formData.purpose);
+        formDataToSend.append("price", formData.price);
+        formDataToSend.append("beds", formData.beds);
+        formDataToSend.append("bathrooms", formData.bathrooms);
+        formDataToSend.append("square_feet", formData.square_feet);
+        formDataToSend.append("property_type", formData.property_type);
+        formDataToSend.append("furnishing", formData.furnishing);
+        formDataToSend.append("propertyId", formData.propertyId);
+        formDataToSend.append("completion", formData.completion);
+        formDataToSend.append("year_built", formData.year_built);
+
+        formDataToSend.append("descriptions", JSON.stringify([...formData.descriptions]));
+        formDataToSend.append("amenities", JSON.stringify([...formData.amenities]))
+
+        if(formData.photos && formData.photos.length > 0){
+            formData.photos.forEach(photoObj => {
+                if(photoObj.photo instanceof File){
+                    formDataToSend.append("photos", photoObj.photo)
+                }else {
+                    console.error("Invalid photo file:", photoObj.photo);
+                }
+            })
+        }
+
+        fetch("http://127.0.0.1:9712/houses",{
             method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(formData)
+            credentials:'include',
+            body:formDataToSend
         })
         .then(response => {
             if(!response.ok){
@@ -237,7 +241,7 @@ function AddHouseMobile (){
         const file = event.dataTransfer.files[0];
         if (file) {
             const fileURL = URL.createObjectURL(file);
-            setFile(fileURL);
+            setFilePreview(fileURL);
 
             setPhotoData((prevPhotoData) => ({
                 ...prevPhotoData,
@@ -336,9 +340,9 @@ function AddHouseMobile (){
                                             }}
                                         >
                                             {/* Show uploaded image if available */}
-                                            {file ? (
+                                            {filePreview ? (
                                                 <img 
-                                                    src={file}
+                                                    src={filePreview}
                                                     alt="Uploaded Preview"
                                                     style={{
                                                         width: "90%",
@@ -355,7 +359,7 @@ function AddHouseMobile (){
                                                 <>
                                                     <Box display={'flex'} justifyContent={'center'}>
                                                         <img 
-                                                            src="upload.png"
+                                                            src="/upload.png"
                                                             alt="Photo Upload"
                                                             style={{width:"40px", height:"auto"}}
                                                         />
@@ -372,7 +376,7 @@ function AddHouseMobile (){
                                             )}
                                         </Box>
 
-                                        {file && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', mt:'20px'}}>Change Photo</Button>}
+                                        {filePreview && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', mt:'20px'}}>Change Photo</Button>}
                                     </Box>
 
                                     {/* Hidden File Input */}
@@ -488,13 +492,14 @@ function AddHouseMobile (){
 
                             <Box display={'flex'} flexDirection={'column'}>
                                 <Typography fontFamily={"GT Medium"} fontSize={'16px'} color="black">Year Built</Typography>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        value={formData.year_built ? dayjs(formData.year_built) : null}
-                                        onChange={handleChange}
-                                        renderInput={(params) => <TextField {...params} variant="outlined" sx={{ mb: "20px" }} />}
-                                    />
-                                </LocalizationProvider>
+                                <TextField 
+                                    type="date"
+                                    name="year_built"
+                                    value={formData.year_built}
+                                    onChange={handleChange}
+                                    variant="outlined"
+                                    sx={{mb:'20px', width:'100%'}}
+                                />
                             </Box>
                         </Box>
 
@@ -586,102 +591,65 @@ function AddHouseMobile (){
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
 
                     <Box>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell><Typography fontFamily={"GT Bold"} fontSize={'20px'}>Descriptions</Typography></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {formData.descriptions.map((description,index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{description.description}</TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    color="error"
-                                                    onClick={() => DeleteDescription(index)}
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
+                        <Typography fontFamily={'GT Bold'} fontSize={'22px'} color="black">Descriptions</Typography>
 
-                                    <TableRow>
-                                        <TableCell>
-                                            <TextField 
-                                                type="text"
-                                                name="description"
-                                                value={descriptionData.description}
-                                                onChange={handleDescriptionChange}
-                                                variant="outlined"
-                                                label={decsriptionLabel}
-                                                sx={{mb:'20px'}}
-                                                size="small"
-                                                fullWidth
-                                                multiline
-                                                minRows={4}  // Initial number of rows
-                                                maxRows={20}   // Maximum number of rows
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Button onClick={AddDescription} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>SAVE DESCRIPTION</Button>
+                        {descriptionData.map((description,index) => (
+                            <Box key={index} display={'flex'} mb={'20px'}>
+                                <TextField
+                                    name="amenity"
+                                    type="text"
+                                    onChange={(e) => handleDescriptionChange(e, index)}
+                                    placeholder={'Description'}
+                                    value={description.description}
+                                    multiline
+                                    minRows={4}
+                                    maxRows={40}
+                                    fullWidth
+                                />
+                                
+                                <IconButton onClick={() => DeleteDescription(index)}>
+                                    <Delete sx={{fontSize:'30px', color:'black', border:'2px solid red', padding:'10px', borderRadius:"8px", ":hover":{backgroundColor:'red', color:'white'}}}/>
+                                </IconButton>
+                            </Box>
+                        ))}
+
+                            <Button onClick={newDescriptionInputField} variant="contained" style={{backgroundColor:'grey', color:'white', marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <AddOutlined sx={{color:'white', fontSize:'19px'}}/>
+                                <Typography fontFamily={"GT Bold"} fontSize={'12px'}>Add new Paragraph</Typography>
+                            </Button>
                     </Box>
 
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
 
                     <Box>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableCell><Typography fontFamily={"GT Bold"} fontSize={'20px'}>Amenities</Typography></TableCell>
-                                </TableHead>
-                                <TableBody>
-                                    {formData.amenities.map((amenity,index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>{amenity.amenity}</TableCell>
-                                            <TableCell>
-                                                <IconButton
-                                                    color="error"
-                                                    onClick={() => DeleteAmenity(index)}
-                                                >
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    <TableRow>
-                                        <TableCell>
-                                            <TextField  
-                                                type="text"
-                                                name="amenity"
-                                                value={amenityData.amenity}
-                                                onChange={handleAmenityChange}
-                                                variant="outlined"
-                                                label={amenityLabel}
-                                                sx={{mb:'20px'}}
-                                                size="small"
-                                                fullWidth
-                                                multiline
-                                                minRows={4}  // Initial number of rows
-                                                maxRows={20}   // Maximum number of rows
+                        <Typography fontFamily={'GT Bold'} fontSize={'22px'} color="black">Amenities</Typography>
 
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Button onClick={AddAmenity} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>SAVE AMENITY</Button>
+                        {amenityData.map((amenity,index) => (
+                            <Box key={index} display={'flex'} mb={'20px'}>
+                                <TextField 
+                                    name="amenity"
+                                    type="text"
+                                    value={amenity.amenity}
+                                    placeholder={'Amenity'}
+                                    onChange={(e) => handleAmenityChange(e ,index)}
+                                />
+
+                            <IconButton onClick={() => DeleteAmenity(index)}>
+                                    <Delete sx={{fontSize:'30px', color:'black', border:'2px solid red', padding:'10px', borderRadius:"8px", ":hover":{backgroundColor:'red', color:'white'}}}/>
+                                </IconButton>
+                            </Box>
+                        ))}
+
+                            <Button onClick={newAmenityInputField} variant="contained" style={{backgroundColor:'grey', color:'white', marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <AddOutlined sx={{color:'white', fontSize:'19px'}}/>
+                                <Typography fontFamily={"GT Bold"} fontSize={'12px'}>Add new Amenity</Typography>
+                            </Button>
                     </Box>
+
+                    <Button type="submit" variant="contained" sx={{width:'100%', marginTop:"20px",fontSize:'20px',fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>POST HOUSE</Button>
 
                 </form>
 
-                <Button type="submit" variant="contained" sx={{width:'100%', fontSize:'20px',fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>POST HOUSE</Button>
 
             </Box>
 

@@ -47,13 +47,6 @@ function MobileLandingpage (){
                                 style={{borderRadius:'15px', width:'415px', height:'auto'}}
                                 />
                             </Box>
-                            {/* <Box sx={{transition:"transform 0.3s ease-in-out", ":hover":{transform:"scale(1.03)"}}}>
-                                <img 
-                                src="OP12.jpeg"
-                                alt="house"
-                                style={{borderRadius:'15px', width:'415px', height:'auto'}}
-                                />
-                            </Box> */}
                         </Box>
                     </Box>
              

@@ -2,17 +2,28 @@ import { Business } from "@mui/icons-material";
 import Apartment from "@mui/icons-material/Apartment";
 import House from "@mui/icons-material/House";
 import Villa from "@mui/icons-material/Villa";
-import { Box, Button, IconButton, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, IconButton, MenuItem, Select, Slider, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 
 function Filters ({setFilters}){
 
-    const [startingPrice, setStartingPrice] = useState("")
-    const [endingPrice, setEndingPrice] = useState("")
+    const [startingPrice, setStartingPrice] = useState(0)
+    const [value, setValue] = useState([0, 30000000]);
+    const [endingPrice, setEndingPrice] = useState(30000000)
     const [propertyType, setPropertyType] = useState("")
-    const [rooms, setRooms] = useState("")
+    const [beds, setBeds] = useState("")
     const [location ,setLocation] = useState("")
     const isMobile = useMediaQuery('(max-width:1700px)')
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+        setStartingPrice(newValue[0])
+        setEndingPrice(newValue[1])
+    };
+
+
+    console.log("Starting Price", startingPrice)
+    console.log("ending Price", endingPrice)
 
     function handleApply() {
         setFilters({
@@ -20,7 +31,7 @@ function Filters ({setFilters}){
             startingPrice,
             endingPrice,
             propertyType,
-            rooms,
+            beds,
         });
     }
     
@@ -37,20 +48,8 @@ function Filters ({setFilters}){
             startingPrice: "",
             endingPrice: "",
             propertyType: "",
-            rooms: "",
+            beds: "",
         });
-    }
-
-    function handleLocation(selectedLocation){
-        setLocation(selectedLocation)
-    }
-
-    function handleStartingPrice(price){
-        setStartingPrice(price)
-    }
-
-    function handleEndingPrice(price){
-        setEndingPrice(price)
     }
 
     function handlePropertyType(type){
@@ -58,14 +57,13 @@ function Filters ({setFilters}){
     }
 
     function handleRooms(rooms){
-        setRooms(rooms)
+        setBeds(rooms)
     }
 
-    console.log(location);
-    console.log(startingPrice);
-    console.log(endingPrice);
-    console.log(propertyType);
-    console.log(rooms);
+    // Function to format the value with commas
+    const formatValue = (value) => {
+        return value.toLocaleString(); // Adds commas as thousand separators
+    };
 
     return ( 
 
@@ -125,7 +123,7 @@ function Filters ({setFilters}){
                                     value={location}
                                     name="location"
                                     type="text"
-                                    onChange={(e) => handleLocation(e.target.value)}
+                                    onChange={(e) => setLocation(e.target.value)}
                                     sx={{width:'250px', fontFamily:'GT Light'}}
                                     inputProps={{
                                         color:"black",
@@ -146,42 +144,51 @@ function Filters ({setFilters}){
                             </Box>
                         </Box>
                         <Box>
-                            <Box>
-                                <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" mb={'10px'}>Price Range</Typography>
-                            </Box>
-
-                            <Box display={'flex'} width={'250px'} gap={'20px'}>
-                                <TextField 
-                                    value={startingPrice}
-                                    name="startingPrice"
-                                    onChange={(e) => handleStartingPrice(e.target.value)}
-                                    type="number"
-                                    variant="outlined"
-                                />
-                                <TextField 
-                                    value={endingPrice}
-                                    name="endingPrice"
-                                    onChange={(e) => handleEndingPrice(e.target.value)}
-                                    type="number"
-                                    variant="outlined"
-                                />
-                            </Box>
+                        <Box>
+                            <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" >Price Range(AED)</Typography>
                         </Box>
+
+                        <Slider 
+                            value={value}
+                            aria-label="Default"
+                            onChange={handleChange}
+                            valueLabelFormat={formatValue}
+                            min={0}
+                            max={100000000}
+                        />
+
+                        <Box display={'flex'} width={'250px'} gap={'20px'}>
+                            <TextField 
+                                value={value[0].toLocaleString()}
+                                name="startingPrice"
+                                onChange={(e) => setStartingPrice(Math.max(0, e.target.value))}
+                                type="text"
+                                variant="outlined"
+                            />
+                            <TextField 
+                                value={value[1].toLocaleString()}
+                                name="endingPrice"
+                                onChange={(e) => setEndingPrice(Math.max(0, e.target.value))}
+                                type="text"
+                                variant="outlined"
+                            />
+                        </Box>
+                    </Box>
                         <Box>
                             <Box>
                                 <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" mb={'10px'}>Rooms</Typography>
                             </Box>
                             <Box display={'flex'} gap={'3px'}>
-                                <Box onClick={() => handleRooms("1")} sx={{backgroundColor: rooms === "1" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                                <Box onClick={() => handleRooms(1)} sx={{backgroundColor: beds === "1" ? 'orange' : 'white', color: beds === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                     <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>1</Typography>
                                 </Box>
-                                <Box onClick={() => handleRooms("2")} sx={{backgroundColor: rooms === "2" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                                <Box onClick={() => handleRooms(2)} sx={{backgroundColor: beds === "2" ? 'orange' : 'white', color: beds === '2' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                     <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>2</Typography>
                                 </Box>
-                                <Box onClick={() => handleRooms("3")} sx={{backgroundColor: rooms === "3" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                                <Box onClick={() => handleRooms(3)} sx={{backgroundColor: beds === "3" ? 'orange' : 'white', color: beds === '3' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                     <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>3</Typography>
                                 </Box>
-                                <Box onClick={() => handleRooms("4")} sx={{backgroundColor: rooms === "4" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                                <Box onClick={() => handleRooms(4)} sx={{backgroundColor: beds === "4" ? 'orange' : 'white', color: beds === '4' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                     <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>4+</Typography>
                                 </Box>
                             </Box>
@@ -246,7 +253,7 @@ function Filters ({setFilters}){
                                 value={location}
                                 name="location"
                                 type="text"
-                                onChange={(e) => handleLocation(e.target.value)}
+                                onChange={(e) => setLocation(e.target.value)}
                                 sx={{width:'250px', fontFamily:'GT Light'}}
                                 inputProps={{
                                     color:"black",
@@ -268,22 +275,31 @@ function Filters ({setFilters}){
                     </Box>
                     <Box>
                         <Box>
-                            <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" mb={'10px'}>Price Range</Typography>
+                            <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" >Price Range(AED)</Typography>
                         </Box>
+
+                        <Slider 
+                            value={value}
+                            aria-label="Default"
+                            onChange={handleChange}
+                            valueLabelFormat={formatValue}
+                            min={0}
+                            max={100000000}
+                        />
 
                         <Box display={'flex'} width={'250px'} gap={'20px'}>
                             <TextField 
-                                value={startingPrice}
+                                value={value[0].toLocaleString()}
                                 name="startingPrice"
-                                onChange={(e) => handleStartingPrice(e.target.value)}
-                                type="number"
+                                onChange={(e) => setStartingPrice(Math.max(0, e.target.value))}
+                                type="text"
                                 variant="outlined"
                             />
                             <TextField 
-                                value={endingPrice}
+                                value={value[1].toLocaleString()}
                                 name="endingPrice"
-                                onChange={(e) => handleEndingPrice(e.target.value)}
-                                type="number"
+                                onChange={(e) => setEndingPrice(Math.max(0, e.target.value))}
+                                type="text"
                                 variant="outlined"
                             />
                         </Box>
@@ -293,16 +309,16 @@ function Filters ({setFilters}){
                             <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" mb={'10px'}>Rooms</Typography>
                         </Box>
                         <Box display={'flex'} gap={'3px'}>
-                            <Box onClick={() => handleRooms("1")} sx={{backgroundColor: rooms === "1" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                            <Box onClick={() => handleRooms(1)} sx={{backgroundColor: beds === 1 ? 'orange' : 'white', color: beds === 1 ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                 <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>1</Typography>
                             </Box>
-                            <Box onClick={() => handleRooms("2")} sx={{backgroundColor: rooms === "2" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                            <Box onClick={() => handleRooms(2)} sx={{backgroundColor: beds === 2 ? 'orange' : 'white', color: beds === 2 ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                 <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>2</Typography>
                             </Box>
-                            <Box onClick={() => handleRooms("3")} sx={{backgroundColor: rooms === "3" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                            <Box onClick={() => handleRooms(3)} sx={{backgroundColor: beds === 3 ? 'orange' : 'white', color: beds === 3 ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                 <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>3</Typography>
                             </Box>
-                            <Box onClick={() => handleRooms("4")} sx={{backgroundColor: rooms === "4" ? 'orange' : 'white', color: rooms === '1' ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
+                            <Box onClick={() => handleRooms(4)} sx={{backgroundColor: beds === 4 ? 'orange' : 'white', color: beds === 4 ? 'white' : 'black', width:"50px", boxShadow: "0px 1px 1px rgba(0, 0, 0, 0.3)", ":hover":{backgroundColor:'orange'}}}>
                                 <Typography textAlign={'center'} fontSize={'18px'} fontFamily={"GT Bold"} padding={'15px'} color="black" sx={{":hover":{color:'white'}}}>4+</Typography>
                             </Box>
                         </Box>

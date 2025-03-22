@@ -1,10 +1,9 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box} from "@mui/material";
 import NavBar from "./navbar";
 import './universal.css'
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Footer from "./footer";
-import Page3 from "./Page3";
 import Page4 from "./Page4";
 import MobileLandingpage from "./Mobilelandingpage";
 
@@ -26,10 +25,6 @@ function MobileHomePage (){
 
             <Box>
                 <Page2/>
-            </Box>
-
-            <Box>
-                <Page3/>
             </Box>
 
             <Box>

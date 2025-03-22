@@ -8,7 +8,7 @@ function Landingpage (){
     const navigate = useNavigate()
 
     function handleProperties(){
-        navigate('/properties')
+        navigate('/properties/Buy')
     }
     
     return ( 

@@ -7,6 +7,8 @@ import { Box } from '@mui/material'
 import PropertyDisplay from './components/PropertyDisplay'
 import DetailedPropertyMobile from './components/DetailedPropertyMobile'
 import AddHouse from './components/AddHouse'
+import EditHouse from './components/EditHouse'
+import HouseChanges from './components/HouseChanges'
 
 function App() {
 
@@ -19,6 +21,8 @@ function App() {
         <Route path='/properties/:aim' element={<PropertyDisplay />} />
         <Route path='/house-detail/:houseId/:aim' element={<DetailedPropertyMobile />} />
         <Route path='/add-house' element={<AddHouse />} />
+        <Route path='/edit-house/:houseId' element={<EditHouse />} />
+        <Route path='/house-changes' element={<HouseChanges />} />
       </Routes>
     </Box>
   )

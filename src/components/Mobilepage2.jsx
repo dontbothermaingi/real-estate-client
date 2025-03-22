@@ -1,38 +1,35 @@
-import { MonetizationOn } from "@mui/icons-material";
+import { LocationOn, MonetizationOn } from "@mui/icons-material";
 import HomeWorkOutlined from "@mui/icons-material/HomeWorkOutlined";
 import ReceiptLongOutlined from "@mui/icons-material/ReceiptLongOutlined";
 import TrendingUpOutlined from "@mui/icons-material/TrendingUpOutlined";
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Pagination, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Card, CardContent, Divider, IconButton, Pagination, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-function MobilePage2 (){
+function MobilePage2 ({setHouseId}){
 
     const [houses, setHouses] = useState([])
-    const itemsPerPage = 1;
-    const [currentPage, setCurrentPage] = useState(1);
     const isTablet = useMediaQuery('(min-width:768px) and (max-width:1700px)')
     const navigate = useNavigate();
 
 
     useEffect(()=>{
-        fetch("http://localhost:3000/houses")
+        fetch("http://localhost:9712/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
         })
     },[])
 
-    const handlePageChange = (event, value) => {
-        setCurrentPage(value);
-    };
 
-    function handleProperties(){
-        navigate('/properties')
+    function handleIndividualProperty(id){
+        navigate('/properties/Buy')
+        setHouseId(id)
     }
 
-    const totalPages = Math.ceil(houses.length/itemsPerPage)
-    const displayedCards = houses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    function handleProperties(){
+        navigate('/properties/Buy')
+    }
 
     return ( 
         <Box>
@@ -62,42 +59,58 @@ function MobilePage2 (){
                         >
 
                                 {houses.map((house,index) => (
-                                        <Card
-                                            key={index}
-                                            sx={{
-                                                borderRadius:'15px',
-                                                padding:'20px',
-                                                backgroundColor:'#FFFFF0',
-                                                display:'flex',
-                                                flexDirection:'column',
-                                                height:'450px',
-                                                minWidth:'300px',
-                                                transition:'transform 0.3s ease-in-out',
-                                                ":hover":{
-                                                    transform:"scale(1.03)"
-                                                }
-                                            }}
-                                        >
-                                            <CardMedia>
-                                                <img 
-                                                    src={house.image}
-                                                    alt="house"
-                                                    style={{borderRadius:'15px', width:'100%', height:'250px'}}
-                                                />
-                                            </CardMedia>
-
-                                            <CardContent>
-                                                <Box>
-                                                    <Typography fontFamily={'GT Bold'}  fontSize={'22px'}>{house.address}</Typography>
-                                                    <Typography fontFamily={'GT Light'} fontSize={'15px'}>{house.age}</Typography>
-                                                    <Typography fontFamily={'GT Light'} fontSize={'15px'}>{house.road}</Typography>
-                                                </Box>
-                                                <Box mt={"50px"}>
-                                                    <Typography fontFamily={'GT Medium'}>{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                                                </Box>
-                                            </CardContent>
-                                        </Card>
-                                ))}    
+                                    <Box
+                                        key={index}
+                                        onClick={() => handleIndividualProperty(house.id)}
+                                        sx={{
+                                            backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`,
+                                            backgroundSize: "cover", // Ensure the image covers the box
+                                            backgroundPosition: "center", // Center the image
+                                            width: "100%", // Adjust width as needed
+                                            height: "450px", // Adjust height as needed
+                                            borderRadius:'15px',
+                                        }}
+                                        padding={'12px'}
+                                        display={'flex'}
+                                        justifyContent={'space-between'}
+                                        flexDirection={'column'}                        
+                                     >
+        
+                                    <Box
+                                        sx={{
+                                            width:'90px',
+                                            height:'20px',
+                                            borderRadius:'25px',
+                                            display:'flex',
+                                            justifyContent:'center',
+                                            alignItems:'center',
+                                            padding:'10px',
+                                            backgroundColor:'white'
+                                        }}
+                                    >
+                                        <Typography color="black" textAlign={'center'} fontFamily={'GT Medium'} fontSize={'15px'}>{house.property_type}</Typography>
+                                    </Box>
+                                    <Card
+                                        sx={{
+                                            borderRadius:'10px',
+                                            width:'100%'
+                                            
+                                        }}
+                                    >
+                                        <CardContent>
+                                            <Typography fontFamily={"GT Medium"} fontSize={'18px'}>{house.location}</Typography>
+                                            <Box display={'flex'} alignItems={'center'} ml={'-15px'}>
+                                                <IconButton>
+                                                    <LocationOn style={{color:'orange'}}/>
+                                                </IconButton>
+                                                <Typography fontFamily={"GT Light"} fontSize={'14px'}>{house.address}</Typography>
+                                            </Box>
+                                            <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
+                                        </CardContent>
+                                    </Card>
+        
+                                    </Box>
+                                ))}  
 
                             </Box>
 
@@ -255,42 +268,59 @@ function MobilePage2 (){
                         >
 
                                 {houses.map((house,index) => (
-                                        <Card
-                                            key={index}
-                                            sx={{
-                                                borderRadius:'15px',
-                                                padding:'20px',
-                                                backgroundColor:'#FFFFF0',
-                                                display:'flex',
-                                                flexDirection:'column',
-                                                height:'425px',
-                                                minWidth:'300px',
-                                                transition:'transform 0.3s ease-in-out',
-                                                ":hover":{
-                                                    transform:"scale(1.03)"
-                                                }
-                                            }}
-                                        >
-                                            <CardMedia>
-                                                <img 
-                                                    src={house.image}
-                                                    alt="house"
-                                                    style={{borderRadius:'15px', width:'100%', height:'220px'}}
-                                                />
-                                            </CardMedia>
-
-                                            <CardContent>
-                                                <Box>
-                                                    <Typography fontFamily={'GT Bold'}  fontSize={'22px'}>{house.address}</Typography>
-                                                    <Typography fontFamily={'GT Light'} fontSize={'15px'}>{house.age}</Typography>
-                                                    <Typography fontFamily={'GT Light'} fontSize={'15px'}>{house.road}</Typography>
-                                                </Box>
-                                                <Box mt={"50px"}>
-                                                    <Typography fontFamily={'GT Medium'}>{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                                                </Box>
-                                            </CardContent>
-                                        </Card>
-                                ))}    
+                                    <Box
+                                        key={index}
+                                        onClick={() => handleIndividualProperty(house.id)}
+                                        sx={{
+                                            backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`,
+                                            backgroundSize: "cover", // Ensure the image covers the box
+                                            backgroundPosition: "center", // Center the image
+                                            width: "100%", // Adjust width as needed
+                                            height: "450px", // Adjust height as needed
+                                            borderRadius:'15px',
+                                        }}
+                                        padding={'12px'}
+                                        display={'flex'}
+                                        justifyContent={'space-between'}
+                                        flexDirection={'column'}  
+                                        minWidth={'300px'}                      
+                                     >
+        
+                                    <Box
+                                        sx={{
+                                            width:'90px',
+                                            height:'20px',
+                                            borderRadius:'25px',
+                                            display:'flex',
+                                            justifyContent:'center',
+                                            alignItems:'center',
+                                            padding:'10px',
+                                            backgroundColor:'white'
+                                        }}
+                                    >
+                                        <Typography color="black" textAlign={'center'} fontFamily={'GT Medium'} fontSize={'15px'}>{house.property_type}</Typography>
+                                    </Box>
+                                    <Card
+                                        sx={{
+                                            borderRadius:'10px',
+                                            width:'100%'
+                                            
+                                        }}
+                                    >
+                                        <CardContent>
+                                            <Typography fontFamily={"GT Medium"} fontSize={'18px'}>{house.location}</Typography>
+                                            <Box display={'flex'} alignItems={'center'} ml={'-15px'}>
+                                                <IconButton>
+                                                    <LocationOn style={{color:'orange'}}/>
+                                                </IconButton>
+                                                <Typography fontFamily={"GT Light"} fontSize={'14px'}>{house.address}</Typography>
+                                            </Box>
+                                            <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
+                                        </CardContent>
+                                    </Card>
+        
+                                    </Box>
+                                ))}   
 
                             </Box>
 

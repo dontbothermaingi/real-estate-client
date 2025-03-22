@@ -1,30 +1,30 @@
-import { MonetizationOn } from "@mui/icons-material";
+import { LocationOn, MonetizationOn } from "@mui/icons-material";
 import HomeWorkOutlined from "@mui/icons-material/HomeWorkOutlined";
 import ReceiptLongOutlined from "@mui/icons-material/ReceiptLongOutlined";
 import TrendingUpOutlined from "@mui/icons-material/TrendingUpOutlined";
-import { Box, Button, Card, CardContent, CardMedia, IconButton, Pagination, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Divider, IconButton, Pagination, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 function Page2 ({setHouseId}){
 
     const [houses, setHouses] = useState([])
-    const itemsPerPage = 3;
+    const itemsPerPage = 4;
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate()
 
     function handleProperties(){
-        navigate('/properties')
+        navigate('/properties/Buy')
     }
 
     function handleIndividualProperty(id){
-        navigate('/properties')
+        navigate('/properties/Buy')
         setHouseId(id)
     }
 
 
     useEffect(()=>{
-        fetch("http://localhost:3000/houses")
+        fetch("http://127.0.0.1:9712/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -55,52 +55,67 @@ function Page2 ({setHouseId}){
                     />
                     </Box>
 
-                    <Box display={'flex'} flexDirection={'column'} gap={'20px'} width={'55%'}>
+                    <Box display={'flex'} flexDirection={'column'} gap={'20px'} width={'100%'}>
 
-                        <Box display={'grid'} gridTemplateColumns={{xs:'repeat(1, 1fr)', sm:'repeat(2, 1fr)', md:'repeat(3, 1fr)'}} gap={'30px'} >
+                        <Box display={'grid'} gridTemplateColumns={{xs:'repeat(1, 1fr)', sm:'repeat(2, 1fr)', md:'repeat(4, 1fr)'}} gap={'30px'} >
 
                             {displayedCards.map((house,index) => (
-                                    <Card
+                                    <Box
                                         key={index}
                                         onClick={() => handleIndividualProperty(house.id)}
                                         sx={{
+                                            backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`,
+                                            backgroundSize: "cover", // Ensure the image covers the box
+                                            backgroundPosition: "center", // Center the image
+                                            width: "100%", // Adjust width as needed
+                                            height: "450px", // Adjust height as needed
                                             borderRadius:'15px',
-                                            padding:'20px',
-                                            backgroundColor:'#FFFFF0',
+                                        }}
+                                        padding={'12px'}
+                                        display={'flex'}
+                                        justifyContent={'space-between'}
+                                        flexDirection={'column'}                        
+                                     >
+        
+                                    <Box
+                                        sx={{
+                                            width:'90px',
+                                            height:'20px',
+                                            borderRadius:'25px',
                                             display:'flex',
-                                            flexDirection:'column',
-                                            height:'450px',
-                                            width:'340px',
-                                            transition:'transform 0.3s ease-in-out',
-                                            ":hover":{
-                                                transform:"scale(1.03)"
-                                            }
+                                            justifyContent:'center',
+                                            alignItems:'center',
+                                            padding:'10px',
+                                            backgroundColor:'white'
                                         }}
                                     >
-                                        <CardMedia>
-                                            <img 
-                                                src={house.image}
-                                                alt="house"
-                                                style={{borderRadius:'15px', width:'100%', height:'250px'}}
-                                            />
-                                        </CardMedia>
-
+                                        <Typography color="black" textAlign={'center'} fontFamily={'GT Medium'} fontSize={'15px'}>{house.property_type}</Typography>
+                                    </Box>
+                                    <Card
+                                        sx={{
+                                            borderRadius:'10px',
+                                            width:'100%'
+                                            
+                                        }}
+                                    >
                                         <CardContent>
-                                            <Box>
-                                                <Typography fontFamily={'GT Bold'} fontSize={'25px'}>{house.address}</Typography>
-                                                <Typography fontFamily={'GT Light'}>{house.age}</Typography>
-                                                <Typography fontFamily={'GT Light'}>{house.road}</Typography>
+                                            <Typography fontFamily={"GT Medium"} fontSize={'18px'}>{house.location}</Typography>
+                                            <Box display={'flex'} alignItems={'center'} ml={'-15px'}>
+                                                <IconButton>
+                                                    <LocationOn style={{color:'orange'}}/>
+                                                </IconButton>
+                                                <Typography fontFamily={"GT Light"} fontSize={'14px'}>{house.address}</Typography>
                                             </Box>
-                                            <Box mt={"50px"}>
-                                                <Typography fontFamily={'GT Medium'}>{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
-                                            </Box>
+                                            <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
                                         </CardContent>
                                     </Card>
+        
+                                    </Box>
                             ))}    
 
                         </Box>
 
-                        <Box display={'flex'} justifyContent={'space-between'} gap={"20px"} alignItems={'center'} width={'1200px'}>
+                        <Box display={'flex'} justifyContent={'space-between'} gap={"20px"} alignItems={'center'} width={'100%'}>
                                 <Box>
                                     {totalPages > 1 && (
                                             <Box display={'flex'} justifyContent={'left'} sx={{backgroundColor:"#FFFFF0"}}>

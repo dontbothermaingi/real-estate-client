@@ -1,16 +1,14 @@
-import { Box, Button, Typography, useMediaQuery } from "@mui/material";
+import { Box,useMediaQuery } from "@mui/material";
 import NavBar from "./navbar";
 import './universal.css'
 import Landingpage from "./landingpage";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Footer from "./footer";
-import Page3 from "./Page3";
 import Page4 from "./Page4";
 import MobileLandingpage from "./Mobilelandingpage";
 import MobilePage1 from "./MobilePage1";
 import MobilePage2 from "./Mobilepage2";
-import MobilePage3 from "./Mobilepage3";
 import MobilePage4 from "./Mobilepage4";
 import MobileFooter from "./Mobilefooter";
 
@@ -40,10 +38,6 @@ function HomePage (){
                     </Box>
 
                     <Box>
-                        <MobilePage3/>
-                    </Box>
-
-                    <Box>
                         <MobilePage4/>
                     </Box>
 
@@ -68,10 +62,6 @@ function HomePage (){
 
                     <Box>
                         <Page2/>
-                    </Box>
-
-                    <Box>
-                        <Page3/>
                     </Box>
 
                     <Box>

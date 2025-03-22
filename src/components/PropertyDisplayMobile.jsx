@@ -1,9 +1,8 @@
-import { Box, Divider, useMediaQuery } from "@mui/material";
+import { Box, Button, Divider, Typography, useMediaQuery } from "@mui/material";
 import "./universal.css"
 import { useState } from "react";
 import FiltersMobile from "./FiltersMobile";
 import HousesMobile from "./HousesMobile";
-import NavBar from "./navbar";
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
 import Filters from "./Filters";
 import Houses from "./Houses";
@@ -20,6 +19,11 @@ function PropertyDisplayMobile (){
         propertyType: "",
         rooms: "",
     });
+    const [activeSelection, setActiveSelection] = useState("")
+
+    function handleToggele(dropdown){
+        setActiveSelection(activeSelection === dropdown ? null:dropdown) 
+    }
 
     const [houseId, setHouseId] = useState(1)
     const isTablet = useMediaQuery('(min-width:768px) and (max-width:1700px)')
@@ -29,7 +33,7 @@ function PropertyDisplayMobile (){
 
         <Box>
             {isTablet ? (
-                <Box sx={{backgroundColor:"#F4F5FC"}}>
+                <Box sx={{backgroundColor:"#F4F5FC"}} paddingBottom={'30px'}>
 
                 <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
                     <PropertyDisplayNavbar setPupose={setPupose}/>
@@ -38,7 +42,12 @@ function PropertyDisplayMobile (){
                 <Box paddingLeft={'50px'} paddingRight={'20px'} paddingTop={'40px'} gap={'20px'}>
 
                     <Box>
-                        <Filters setFilters={setFilters}/>
+                        <Box>
+                            <Button onClick={() => handleToggele('Filters')} variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={'GT Bold'}>{activeSelection === 'Filters' ? "HIDE FILTER":"SHOW FILTER"}</Typography></Button>
+                        </Box>
+
+                        <Box mt={'20px'} mb={'20px'}>{activeSelection === 'Filters' && <Filters setFilters={setFilters}/>}</Box>
+
                     </Box>
 
                     <Divider
@@ -81,7 +90,7 @@ function PropertyDisplayMobile (){
                                 '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
                             }}
                         >
-                            <DetailedProperty houseId={houseId}/>
+                            <DetailedProperty pupose={pupose} houseId={houseId}/>
                         </Box>
                     </Box>
 
@@ -92,23 +101,24 @@ function PropertyDisplayMobile (){
                 </Box>
                 </Box>
             ):(
-                 <Box sx={{backgroundColor:"#F4F5FC"}}>
+                 <Box sx={{backgroundColor:"#F4F5FC"}} paddingBottom={'30px'}>
 
                  <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
                      <PropertyDisplayNavbar pupose={pupose} setPupose={setPupose}/>
                  </Box>
  
-                 <Box paddingLeft={'20px'} paddingRight={'20px'} paddingTop={'40px'} display={'flex'} gap={'20px'} flexDirection={'column'}>
+                 <Box paddingLeft={'20px'} paddingRight={'20px'} paddingTop={'40px'} display={'flex'} flexDirection={'column'}>
  
-                     <Box>
-                         <FiltersMobile setFilters={setFilters}/>
-                     </Box>
+                    <Box>
+                        <Box>
+                            <Button onClick={() => handleToggele('Filters')} variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={'GT Bold'}>{activeSelection === 'Filters' ? "HIDE FILTER":"SHOW FILTER"}</Typography></Button>
+                        </Box>
+
+                        <Box mt={'20px'} mb={'20px'}>{activeSelection === 'Filters' && <FiltersMobile setFilters={setFilters}/>}</Box>
+
+                    </Box>
  
                      <Box 
-                         // width={'100%'} 
-                         // overflow={'auto'} 
-                         // height={'84vh'} 
-                         padding={'20px'} 
                          sx={{
                              overflowY: 'auto',
                              flexWrap: 'nowrap',  // Ensures all items stay in one row
@@ -119,22 +129,6 @@ function PropertyDisplayMobile (){
                      >
                          <HousesMobile pupose={pupose} filters={filters} setHouseId={setHouseId}/>
                      </Box>
- 
-                     {/* <Box 
-                         width={'100%'} 
-                         overflow={'auto'} 
-                         height={'84vh'} 
-                         // padding={'20px'} 
-                         sx={{
-                             overflowX: 'auto',
-                             flexWrap: 'nowrap',  // Ensures all items stay in one row
-                             paddingRight: '30px',
-                             '&::-webkit-scrollbar': { height: '8px', width:'0px' },  // Optional: style scrollbar
-                             '&::-webkit-scrollbar-thumb': { background: '#ccc', borderRadius: '10px' }
-                         }}
-                     >
-                         <DetailedProperty houseId={houseId}/>
-                     </Box> */}
  
                  </Box>
                  </Box>

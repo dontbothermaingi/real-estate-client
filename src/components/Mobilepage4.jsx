@@ -9,7 +9,7 @@ function MobilePage4 (){
 
         <Box>
             {isTablet ? (
-                <Box height={'auto'}  paddingBottom={'100px'} >
+                <Box sx={{backgroundColor:'#FFFFF0'}} height={'auto'}  paddingBottom={'100px'} >
                     <Box display={"flex"} flexDirection={'column'} gap={'10px'} className="landing"> 
 
                         <Box mt={'50px'}>
@@ -48,7 +48,7 @@ function MobilePage4 (){
                     </Box>
                 </Box>
             ):(
-                <Box height={'auto'}  paddingBottom={'100px'} >
+                <Box sx={{backgroundColor:'#FFFFF0'}} height={'auto'}  paddingBottom={'100px'} >
                     <Box display={"flex"} flexDirection={'column'} gap={'10px'} className="landing"> 
 
                         <Box>

@@ -1,4 +1,4 @@
-import { Box, Divider, IconButton, Typography, useMediaQuery } from "@mui/material";
+import { Box,Typography, useMediaQuery } from "@mui/material";
 import './universal.css'
 
 function MobilePage1 (){

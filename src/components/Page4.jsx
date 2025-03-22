@@ -4,7 +4,7 @@ import "./universal.css"
 
 function Page4 (){
     return ( 
-        <Box height={'auto'} width={'100%'} paddingBottom={'120px'}>
+        <Box sx={{backgroundColor:'#FFFFF0'}} height={'auto'} width={'100%'} paddingBottom={'120px'}>
             <Box display={"flex"} flexDirection={'column'} gap={'30px'} className="page3"> 
 
                 <Box>

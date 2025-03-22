@@ -2,16 +2,23 @@ import { Business } from "@mui/icons-material";
 import Apartment from "@mui/icons-material/Apartment";
 import House from "@mui/icons-material/House";
 import Villa from "@mui/icons-material/Villa";
-import { Box, Button, IconButton, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, MenuItem, Select, Slider, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 function FiltersMobile ({setFilters}){
 
-    const [startingPrice, setStartingPrice] = useState("")
-    const [endingPrice, setEndingPrice] = useState("")
+    const [startingPrice, setStartingPrice] = useState(0)
+    const [value,setValue] = useState([0,30000000])
+    const [endingPrice, setEndingPrice] = useState(30000000)
     const [propertyType, setPropertyType] = useState("")
     const [rooms, setRooms] = useState("")
     const [location ,setLocation] = useState("")
+
+    const handleValue = (event, newValue)=>{
+        setValue(newValue);
+        setStartingPrice(newValue[0])
+        setEndingPrice(newValue[1])
+    }
 
     function handleApply() {
         setFilters({
@@ -134,43 +141,35 @@ function FiltersMobile ({setFilters}){
                     </Box>
                 </Box>
                 <Box>
-                    <Box>
-                        <Typography fontFamily={'GT Medium'} fontSize={'18px'} color="black" mb={'10px'}>Price Range</Typography>
-                    </Box>
+                        <Box>
+                            <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" >Price Range(AED)</Typography>
+                        </Box>
 
-                    <Box display={'flex'} width={'100%'} gap={'20px'}>
-                        <TextField 
-                             value={startingPrice}
-                             name="startingPrice"
-                             onChange={(e) => handleStartingPrice(e.target.value)}
-                             type="number"
-                             variant="outlined"
-                            //  sx={{width:'350px', fontFamily:'GT Light', fontSize:'13px', height:'40px'}}
-                             inputProps={{
-                                style:{
-                                    fontSize:'13px',
-                                    fontFamily:'GT Light',
-                                    height:'10px'
-                                }
-                             }}
+                        <Slider 
+                            value={value}
+                            aria-label="Default"
+                            onChange={handleValue}
+                            min={0}
+                            max={100000000}
+                        />
 
-                        />
-                        <TextField 
-                             value={endingPrice}
-                             name="endingPrice"
-                             onChange={(e) => handleEndingPrice(e.target.value)}
-                             type="number"
-                             variant="outlined"
-                             inputProps={{
-                                style:{
-                                    fontSize:'13px',
-                                    fontFamily:'GT Light',
-                                    height:'10px'
-                                }
-                             }}
-                        />
-                    </Box>
-                </Box>
+                        <Box display={'flex'} width={'250px'} gap={'20px'}>
+                            <TextField 
+                                value={value[0].toLocaleString()}
+                                name="startingPrice"
+                                onChange={(e) => setStartingPrice(Math.max(0, e.target.value))}
+                                type="text"
+                                variant="outlined"
+                            />
+                            <TextField 
+                                value={value[1].toLocaleString()}
+                                name="endingPrice"
+                                onChange={(e) => setEndingPrice(Math.max(0, e.target.value))}
+                                type="text"
+                                variant="outlined"
+                            />
+                        </Box>
+                        </Box>
                 <Box>
                     <Box>
                         <Typography fontFamily={'GT Medium'} fontSize={'18px'} color="black" mb={'10px'}>Rooms</Typography>

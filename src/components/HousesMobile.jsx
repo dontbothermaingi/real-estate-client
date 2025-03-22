@@ -1,16 +1,16 @@
 import LocationOn from "@mui/icons-material/LocationOn";
-import { Box, Card, CardContent, CardMedia, Divider, IconButton, Typography } from "@mui/material";
+import { Box, Card, CardContent, Divider, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-function HousesMobile ({filters,setHouseId,pupose}){
+function HousesMobile ({filters,pupose}){
 
     const [houses, setHouses] = useState([])
     const [activeSelection, setActiveSelection] = useState("1")
     const navigate = useNavigate()
 
     useEffect(()=>{
-        fetch("http://localhost:3000/houses")
+        fetch("http://127.0.0.1:9712/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -26,17 +26,17 @@ function HousesMobile ({filters,setHouseId,pupose}){
          filteredData = buyHouse.filter((house) => 
             (!filters.propertyType || house.property_type === filters.propertyType) &&
             (!filters.startingPrice || house.price >= filters.startingPrice) &&
-            (!filters.EndingPrice || house.price <= filters.EndingPrice) &&
-            (!filters.rooms || house.rooms === filters.rooms) &&
-            (!filters.location || house.address === filters.location)
+            (!filters.endingPrice || house.price <= filters.endingPrice) &&
+            (!filters.beds || house.beds >= filters.beds) &&
+            (!filters.location || house.location === filters.location)
         );
     }else{
         filteredData = rentHouse.filter((house) => 
             (!filters.propertyType || house.property_type === filters.propertyType) &&
             (!filters.startingPrice || house.price >= filters.startingPrice) &&
-            (!filters.EndingPrice || house.price <= filters.EndingPrice) &&
-            (!filters.rooms || house.rooms === filters.rooms) &&
-            (!filters.location || house.address === filters.location)
+            (!filters.EndingPrice || house.price <= filters.endingPrice) &&
+            (!filters.rooms || house.beds >= filters.rooms) &&
+            (!filters.location || house.location === filters.location)
         );
     }
 
@@ -50,17 +50,18 @@ function HousesMobile ({filters,setHouseId,pupose}){
         <Box>
             {pupose === 'Buy' ? (
                 <Box>
+                    <Typography color="black" fontFamily={"GT Medium"} mb={'10px'} fontSize={'20px'}>{filteredData.length} Listings</Typography>
                     <Box
                         display={'grid'}
                         gridTemplateColumns={{xs:'repeat(1, 1fr)', md:'repeat(2, 1fr)', sm:'repeat(4, 1fr)'}}
                         gap={'50px'}
-                    >
+                    >                        
                         {filteredData.map((house,index) => (
                             <Box
                                 key={index}
                                 onClick={() => handleHouseDetails(house.id,"Buy")}
                                 sx={{
-                                    backgroundImage: `url(${house.image})`, // Use `url()`
+                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -95,12 +96,12 @@ function HousesMobile ({filters,setHouseId,pupose}){
                                     }}
                                 >
                                     <CardContent>
-                                        <Typography fontFamily={"GT Medium"} fontSize={'22px'}>{house.address}</Typography>
+                                        <Typography fontFamily={"GT Medium"} fontSize={'22px'}>{house.location}</Typography>
                                         <Box display={'flex'} alignItems={'center'} ml={'-15px'}>
                                             <IconButton>
                                                 <LocationOn style={{color:'orange'}} fontSize="18px"/>
                                             </IconButton>
-                                            <Typography fontFamily={"GT Light"} fontSize={'15px'}>{house.age}</Typography>
+                                            <Typography fontFamily={"GT Light"} fontSize={'14px'}>{house.address}</Typography>
                                         </Box>
                                         <Divider orientation="horizontal" style={{marginBottom:'10px'}}/>
                                         <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}</Typography>
@@ -123,7 +124,7 @@ function HousesMobile ({filters,setHouseId,pupose}){
                                 key={index}
                                 onClick={() => handleHouseDetails(house.id)}
                                 sx={{
-                                    backgroundImage: `url(${house.image})`, // Use `url()`
+                                    backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`, // Use `url()`
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -158,15 +159,15 @@ function HousesMobile ({filters,setHouseId,pupose}){
                                     }}
                                 >
                                     <CardContent>
-                                        <Typography fontFamily={"GT Medium"} fontSize={'22px'}>{house.address}</Typography>
+                                        <Typography fontFamily={"GT Medium"} fontSize={'22px'}>{house.location}</Typography>
                                         <Box display={'flex'} alignItems={'center'} ml={'-15px'}>
                                             <IconButton>
                                                 <LocationOn style={{color:'orange'}} fontSize="18px"/>
                                             </IconButton>
-                                            <Typography fontFamily={"GT Light"} fontSize={'15px'}>{house.age}</Typography>
+                                            <Typography fontFamily={"GT Light"} fontSize={'15px'}>{house.address}</Typography>
                                         </Box>
                                         <Divider orientation="horizontal" style={{marginBottom:'10px'}}/>
-                                        <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>night</span></Typography>
+                                        <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>month</span></Typography>
                                     </CardContent>
                                 </Card>
 

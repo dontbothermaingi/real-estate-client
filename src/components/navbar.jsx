@@ -1,4 +1,4 @@
-import { Box, FormControl, IconButton, MenuItem, Select, Typography, useMediaQuery } from "@mui/material";
+import { Box, IconButton,Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { motion } from "motion/react"
 import Menu from "@mui/icons-material/Menu";
@@ -8,7 +8,6 @@ import { animate } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm";
 
 function NavBar(){
 
-    const [currency, setCurrency] = useState('AED')
     const [icon, setIcon] = useState("")
     const isMobile = useMediaQuery('(max-width: 1210px)')
     const navigate = useNavigate()
@@ -22,10 +21,6 @@ function NavBar(){
     function handleBuy(aim){
         navigate(`/properties/${aim}`)
         handleChangeIcon('buy')
-    }
-
-    function handleOptions(){
-        navigate("/options")
     }
 
     function handleHome(){
@@ -74,25 +69,6 @@ function NavBar(){
                         </Box>
                         <Box display={'flex'} gap={'20px'} alignItems={'center'}>
                             <Box>
-                                <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                    <Select
-                                        type="text"
-                                        onChange={(e) => setCurrency(e.target.value)}
-                                        value={currency}
-                                        sx={{
-                                            color:'black',
-                                            backgroundColor:'white',
-                                            height:'30px',
-                                            fontSize:'10px',
-                                        }}
-                                    >
-                                        <MenuItem value="AED"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>AED</Typography></MenuItem>
-                                        <MenuItem value="USD"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>USD</Typography></MenuItem>
-                                        <MenuItem value="EUROS"><Typography fontFamily={"GT Regular"} fontSize={'12px'}>EUROS</Typography></MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Box>
-                            <Box>
                                 <IconButton>
                                     <Menu style={{fontSize:'25px', color:'black'}}/>
                                 </IconButton>
@@ -121,21 +97,6 @@ function NavBar(){
                         <IconButton>
                             <LocalPhone style={{color:'black', fontSize:'30px'}}/>
                         </IconButton>
-                        {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                            <Select
-                                type="text"
-                                onChange={(e) => setCurrency(e.target.value)}
-                                value={currency}
-                                sx={{
-                                    color:'black',
-                                    backgroundColor:'white'
-                                }}
-                            >
-                                <MenuItem value="AED"><Typography fontFamily={"GT Regular"}>AED</Typography></MenuItem>
-                                <MenuItem value="USD"><Typography fontFamily={"GT Regular"}>USD</Typography></MenuItem>
-                                <MenuItem value="EUROS"><Typography fontFamily={"GT Regular"}>EUROS</Typography></MenuItem>
-                            </Select>
-                        </FormControl> */}
                         {navBarOption("Contact us")}
                     </Box>
                 </Box>

@@ -2,7 +2,7 @@ import { Box, FormControl, IconButton, MenuItem, Select, Typography, useMediaQue
 import { useState } from "react";
 import { motion } from "motion/react"
 import Menu from "@mui/icons-material/Menu";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import LocalPhone from "@mui/icons-material/LocalPhone";
 import { animate } from "https://cdn.jsdelivr.net/npm/motion@latest/+esm";
 
@@ -21,19 +21,25 @@ function PropertyDisplayNavbar({setPupose, pupose}){
     function handleBuy(aim){
         navigate(`/properties/${aim}`)
         handleChangeIcon('buy')
+        setPupose(aim)
+
     }
 
     function handleRent(aim){
         navigate(`/properties/${aim}`)
         handleChangeIcon('rent')
+        setPupose(aim)
+
     }
 
-    function handleServices(){
-        handleChangeIcon('services')
+    function handleListProperty(){
+        handleChangeIcon('List')
+        navigate('/add-house')
     }
 
-    function handleOptions(){
-        navigate("/options")
+    function handleEditProperty(){
+        handleChangeIcon('List')
+        navigate('/house-changes')
     }
 
     function handleHome(){
@@ -126,7 +132,9 @@ function PropertyDisplayNavbar({setPupose, pupose}){
                         <Box sx={{display:'flex', flexDirection:'row', alignItems:"center", gap:"80px"}}>
                             {navBarOption("Buy",'buy', () => handleBuy('Buy'))}
                             {navBarOption("Rent", "rent", () => handleRent("Rent"))}
-                            {/* {navBarOption("Services", "services", handleServices)} */}
+                            {navBarOption("List Property", "services", () => handleListProperty("List Property"))}
+                            {navBarOption("Edit Property", "services", () => handleEditProperty("Edit Property"))}
+
                         </Box>
                     </motion.div>
 
@@ -134,21 +142,6 @@ function PropertyDisplayNavbar({setPupose, pupose}){
                         <IconButton>
                             <LocalPhone style={{color:'white', fontSize:'30px'}}/>
                         </IconButton>
-                        {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                            <Select
-                                type="text"
-                                onChange={(e) => setCurrency(e.target.value)}
-                                value={currency}
-                                sx={{
-                                    color:'black',
-                                    backgroundColor:'white'
-                                }}
-                            >
-                                <MenuItem value="AED"><Typography fontFamily={"GT Regular"}>AED</Typography></MenuItem>
-                                <MenuItem value="USD"><Typography fontFamily={"GT Regular"}>USD</Typography></MenuItem>
-                                <MenuItem value="EUROS"><Typography fontFamily={"GT Regular"}>EUROS</Typography></MenuItem>
-                            </Select>
-                        </FormControl> */}
                         {navBarOption("Contact us")}
                     </Box>
                 </Box>
