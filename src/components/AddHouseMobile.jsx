@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, IconButton, MenuItem, Select, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Snackbar, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useRef, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
@@ -9,6 +9,8 @@ function AddHouseMobile (){
 
     const [filePreview,setFilePreview] = useState();
     const fileUploadRef = useRef();
+    const [successMessage, setSuccessMessage] = useState("")
+    const [openSnackBar, setOpenSnackBar] = useState(false)
     
     const [formData, setFormData] = useState({
         location:"",
@@ -134,6 +136,11 @@ function AddHouseMobile (){
 
         event.preventDefault()
 
+        if(!formData.photos || !formData.amenities || !formData.descriptions){
+            setOpenSnackBar(true)
+            setSuccessMessage("Invalid House Listing!")
+        }
+
         const formDataToSend = new FormData();
 
         // Append non-file form data
@@ -163,7 +170,7 @@ function AddHouseMobile (){
             })
         }
 
-        fetch("https://real-estate-server-0d4s.onrender.com/houses",{
+        fetch("https://house-server-zocq.onrender.com/houses",{
             method:"POST",
             credentials:'include',
             body:formDataToSend
@@ -192,9 +199,17 @@ function AddHouseMobile (){
                 descriptions:[],
                 amenities:[],
             })
+
+            setAmenityData([{amenity:""}])
+            setDescriptionData([{description:""}])
+
+            setOpenSnackBar(true)
+            setSuccessMessage("House Listed Successfully!")
         })
         .catch((error) => {
             console.error('Error with stock update operations:', error);
+            setOpenSnackBar(true)
+            setSuccessMessage("Invalid House Listing!")
         })
     }
 
@@ -256,10 +271,27 @@ function AddHouseMobile (){
         event.preventDefault();
     }
 
+    function handleCloseSnackBar(event, reason){
+        if(reason === 'clickaway') return;
+        setOpenSnackBar(false);
+    }
+
 
     return ( 
 
         <Box>
+
+            <Snackbar
+                open={openSnackBar}
+                autoHideDuration={6000}
+                anchorOrigin={{horizontal:'center', vertical:'top'}}
+                onClose={handleCloseSnackBar}
+            >
+                <Alert onClose={handleCloseSnackBar} severity={successMessage.startsWith("Invalid") ? "error":"success"}>
+                    {successMessage}
+                </Alert>
+            </Snackbar>
+
             <Box paddingTop={'20px'} paddingLeft={'30px'} paddingRight={'30px'} paddingBottom={'20px'} sx={{backgroundColor:"#242424"}}>
                 <PropertyDisplayNavbar />
             </Box>

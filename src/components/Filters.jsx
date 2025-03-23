@@ -173,7 +173,7 @@ function Filters ({setFilters}){
                                 variant="outlined"
                             />
                         </Box>
-                    </Box>
+                        </Box>
                         <Box>
                             <Box>
                                 <Typography fontFamily={'GT Medium'} fontSize={'22px'} color="black" mb={'10px'}>Rooms</Typography>

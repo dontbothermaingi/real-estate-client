@@ -14,7 +14,7 @@ function MobilePage2 ({setHouseId}){
 
 
     useEffect(()=>{
-        fetch("https://real-estate-server-0d4s.onrender.com/houses")
+        fetch("https://house-server-zocq.onrender.com/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -63,7 +63,7 @@ function MobilePage2 ({setHouseId}){
                                         key={index}
                                         onClick={() => handleIndividualProperty(house.id)}
                                         sx={{
-                                            backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`,
+                                            backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
                                             backgroundSize: "cover", // Ensure the image covers the box
                                             backgroundPosition: "center", // Center the image
                                             width: "100%", // Adjust width as needed
@@ -272,7 +272,7 @@ function MobilePage2 ({setHouseId}){
                                         key={index}
                                         onClick={() => handleIndividualProperty(house.id)}
                                         sx={{
-                                            backgroundImage: `url(http://127.0.0.1:9712/images/${house.photos[0].photo})`,
+                                            backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
                                             backgroundSize: "cover", // Ensure the image covers the box
                                             backgroundPosition: "center", // Center the image
                                             width: "100%", // Adjust width as needed

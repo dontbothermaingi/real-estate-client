@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Alert, Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
@@ -12,7 +12,9 @@ function EditHouse (){
 
     const [filePreview,setFilePreview] = useState();
     const fileUploadRef = useRef();
-    const {houseId} = useParams()
+    const {houseId} = useParams();
+    const [successMessage, setSuccessMessage] = useState("")
+    const [openSnackBar, setOpenSnackBar] = useState(false)
 
     const isMobile = useMediaQuery('(max-width:768px)');
     
@@ -43,7 +45,7 @@ function EditHouse (){
     })
 
     useEffect(() => {
-        fetch(`https://real-estate-server-0d4s.onrender.com/house/${houseId}`)
+        fetch(`https://house-server-zocq.onrender.com/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
 
@@ -172,7 +174,12 @@ function EditHouse (){
 
     function handleSubmit(event){
 
-        event.preventDefault();    
+        event.preventDefault();   
+        
+        if(!formData.photos || !formData.amenities || !formData.descriptions){
+            setOpenSnackBar(true)
+            setSuccessMessage("Invalid House Listing!")
+        }
 
         const formDataToSend = new FormData();
 
@@ -205,7 +212,7 @@ function EditHouse (){
 
         console.log(formData)
 
-        fetch(`https://real-estate-server-0d4s.onrender.com/house/${houseId}`,{
+        fetch(`https://house-server-zocq.onrender.com/house/${houseId}`,{
             method:"PATCH",
             credentials: 'include',
             body:formDataToSend
@@ -237,9 +244,17 @@ function EditHouse (){
                 amenities:[],
                 photos:[],
             })
+
+            setAmenityData([{amenity:""}])
+            setDescriptionData([{description:""}])
+
+            setOpenSnackBar(true)
+            setSuccessMessage("House Edited Successfully!")
         })
         .catch((error) => {
             console.error('Error with stock update operations:', error);
+            setOpenSnackBar(true)
+            setSuccessMessage("Invalid House Edit!")
         })
     }
 
@@ -301,10 +316,26 @@ function EditHouse (){
         event.preventDefault();
     }
 
+    function handleCloseSnackBar(event, reason){
+        if(reason === 'clickaway') return;
+        setOpenSnackBar(false);
+    }
+
 
     return ( 
 
     <Box>
+
+        <Snackbar
+            open={openSnackBar}
+            autoHideDuration={6000}
+            anchorOrigin={{horizontal:'center', vertical:'bottom'}}
+            onClose={handleCloseSnackBar}
+        >
+            <Alert onClose={handleCloseSnackBar} severity={successMessage.startsWith("Invalid") ? "error":"success"}>
+                {successMessage}
+            </Alert>
+        </Snackbar>
 
     {isMobile ? (
         ""
