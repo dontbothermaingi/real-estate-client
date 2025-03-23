@@ -180,7 +180,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                             <Typography fontFamily={"GT Light"}>{house.address}</Typography>
                                         </Box>
                                         <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
-                                        <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>month</span></Typography>
+                                        <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>year</span></Typography>
                                     </CardContent>
                                 </Card>
 
@@ -317,7 +317,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                                 <Typography fontFamily={"GT Light"}>{house.address}</Typography>
                                             </Box>
                                             <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
-                                            <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>month</span></Typography>
+                                            <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>year</span></Typography>
                                         </CardContent>
                                     </Card>
 

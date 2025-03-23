@@ -124,7 +124,7 @@ function HouseChanges  () {
                                             {house.purpose === 'Buy' ? (
                                                 <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}</Typography>
                                             ):(
-                                                <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>month</span></Typography>
+                                                <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>year</span></Typography>
                                             )}
                                         </CardContent>
                                     </Card>

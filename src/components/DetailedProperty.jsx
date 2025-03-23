@@ -293,8 +293,8 @@ function DetailedProperty ({houseId, aim, pupose}){
     
                         <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'20px'} justifyContent={'space-between'} mt={'30px'}>
                             <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
-                                <Typography fontFamily={'GT Light'} color="black">Monthly Rental:</Typography>
-                                <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>month</span></Typography>
+                                <Typography fontFamily={'GT Light'} color="black">Yearly Rental:</Typography>
+                                <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}</Typography>
                             </Box>
                             
                         </Box>
@@ -596,108 +596,6 @@ function DetailedProperty ({houseId, aim, pupose}){
                             </Box>
                         </Box>
         
-                        <Box padding={'10px'} >
-                            <Typography fontFamily={"GT Medium"} color="black" marginTop={'30px'} fontSize={'30px'}>Interested? Fill in the form.</Typography>
-                            <Box sx={{border:'2px #ddd solid', padding:'10px'}} display={'flex'} flexDirection={'column'}>
-                                {/* Consultant Image */}
-                                <Box display={'flex'} alignItems={'center'} justifyContent={'center'} marginTop={'20px'} marginBottom={'20px'}>
-                                    <Box>
-                                        <IconButton>
-                                            <Person style={{color:'black', fontSize:'50px'}}/>
-                                        </IconButton>
-                                    </Box>
-        
-                                    <Box>
-                                        <Typography fontFamily={"GT Medium"} color="black" fontSize={'14px'}>James Carter</Typography>
-                                        <Typography fontFamily={"GT Light"} color="black" fontSize={'14px'}>Consultant - secondary sales.</Typography>
-                                    </Box>
-                                    
-                                </Box>
-        
-                                {/* Form */}
-                                <Box>
-        
-                                    <form style={{display:'flex', flexDirection:'column'}} onSubmit={handleSubmit}>
-                                        <TextField
-                                            name="name"
-                                            value={name}
-                                            type="text"
-                                            onChange={(e) => setName(e.target.value)}
-                                            sx={{mb:'20px'}}
-                                            style={{fontFamily:'GT Medium'}}
-                                            label='Name'
-                                            variant="outlined"
-                                            slotProps={{
-                                                input: {
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                    <AccountCircle />
-                                                    </InputAdornment>
-                                                ),
-                                                },
-                                            }}
-                                        />
-        
-                                        <TextField
-                                            name="email"
-                                            value={email}
-                                            type="text"
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            sx={{mb:'20px'}}
-                                            label='Email'
-                                            variant="outlined"
-                                            slotProps={{
-                                                input: {
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                    <EmailOutlined />
-                                                    </InputAdornment>
-                                                ),
-                                                },
-                                            }}
-                                        />
-        
-                                        <TextField
-                                            name="phoneNumber"
-                                            value={phoneNumber}
-                                            type="text"
-                                            onChange={(e) => setPhoneNumber(e.target.value)}
-                                            sx={{mb:'20px'}}
-                                            label='Phone Number'
-                                            variant="outlined"
-                                            helperText="* Include country code."
-                                            slotProps={{
-                                                input: {
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                    <Phone />
-                                                    </InputAdornment>
-                                                ),
-                                                },
-                                            }}
-                                        />
-        
-                                        <TextField
-                                            name="message"
-                                            value={message}
-                                            type="text"
-                                            onChange={(e) => setMessage(e.target.value)}
-                                            sx={{mb:'20px'}}
-                                            label='Message'
-                                            variant="outlined"
-                                            multiline
-                                            minRows={4}
-                                            maxRows={30}
-                                            fullWidth
-                                            
-                                        />
-        
-                                        <Button type="submit" variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={"GT Bold"}>Request Information</Typography></Button>
-                                    </form>
-                                </Box>
-        
-                            </Box>
-                        </Box>
                     </Box>
                     ):(
                         <Box paddingBottom={'50px'}>
@@ -707,7 +605,7 @@ function DetailedProperty ({houseId, aim, pupose}){
                             <Box display={'flex'} gap={'20px'}>
                                 <Box
                                     sx={{
-                                        backgroundImage: `url(https://real-estate-server-0d4s.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
+                                        backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                         backgroundSize: "cover", // Ensure the image covers the box
                                         backgroundPosition: "center", // Center the image
                                         width: "100%", // Adjust width as needed
@@ -742,8 +640,8 @@ function DetailedProperty ({houseId, aim, pupose}){
         
                             <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={'20px'} justifyContent={'space-between'} mt={'30px'}>
                                 <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
-                                    <Typography fontFamily={'GT Light'} color="black">1 Day Rental:</Typography>
-                                    <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>night</span></Typography>
+                                    <Typography fontFamily={'GT Light'} color="black">Yearly Rental:</Typography>
+                                    <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}</Typography>
                                 </Box>
                                 {/* <Box display={'flex'} flexDirection={'column'} gap={'8px'}>
                                     <Typography fontFamily={'GT Light'} color="black">Week Rental:</Typography>

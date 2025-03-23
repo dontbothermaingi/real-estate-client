@@ -106,11 +106,20 @@ function Page2 ({setHouseId}){
                                                 </IconButton>
                                                 <Typography fontFamily={"GT Light"} fontSize={'14px'}>{house.address}</Typography>
                                             </Box>
+                                            
                                             <Divider orientation="horizontal" style={{marginBottom:'5px'}}/>
+
+                                            {house.purpose === 'Buy' ? (
+                                                <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}</Typography>
+                                            ):(
+                                                <Typography fontFamily={"GT Bold"}>{new Intl.NumberFormat('en-AE',{currency:"AED", style:'currency'}).format(house.price)}/<span style={{fontFamily:'GT Regular'}}>year</span></Typography>
+                                            )}
+
                                         </CardContent>
                                     </Card>
         
                                     </Box>
+                                    
                             ))}    
 
                         </Box>
