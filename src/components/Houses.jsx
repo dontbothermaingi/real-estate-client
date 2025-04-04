@@ -13,7 +13,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
     const isMobile = useMediaQuery('(max-width:1700px)')
 
     useEffect(()=>{
-        fetch("https://house-server-zocq.onrender.com/houses",{
+        fetch("https://house-db.onrender.com/houses",{
             method:'GET',
             credentials:'include'
         })
@@ -70,7 +70,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                     onClick={() => handleId(house.id)}
                                     sx={{
                                         // Use `url()`
-                                        backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
+                                        backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`,
                                         backgroundSize: "cover", // Ensure the image covers the box
                                         backgroundPosition: "center", // Center the image
                                         width: "100%", // Adjust width as needed
@@ -136,7 +136,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                 key={index}
                                 onClick={() => handleId(house.id)}
                                 sx={{
-                                    backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
+                                    backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`,
                                     backgroundSize: "cover", // Ensure the image covers the box
                                     backgroundPosition: "center", // Center the image
                                     width: "100%", // Adjust width as needed
@@ -207,7 +207,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                         onClick={() => handleId(house.id)}
                                         sx={{
                                             // Use `url()`
-                                            backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
+                                            backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`,
                                             backgroundSize: "cover", // Ensure the image covers the box
                                             backgroundPosition: "center", // Center the image
                                             width: "100%", // Adjust width as needed
@@ -273,7 +273,7 @@ function Houses ({filters,setHouseId,aim,pupose}){
                                     key={index}
                                     onClick={() => handleId(house.id)}
                                     sx={{
-                                        backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
+                                        backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`,
                                         backgroundSize: "cover", // Ensure the image covers the box
                                         backgroundPosition: "center", // Center the image
                                         width: "100%", // Adjust width as needed
