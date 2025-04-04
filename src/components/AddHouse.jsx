@@ -91,9 +91,7 @@ function AddHouse (){
 
     // Function to delete a description field
     function DeleteDescription(index){
-        const newDescriptionField = [...descriptionData]
-        newDescriptionField.splice(index, 1);
-        setDescriptionData(newDescriptionField);
+        setDeleteData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
     function handleAmenityChange(event,index) {
