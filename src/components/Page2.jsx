@@ -24,7 +24,7 @@ function Page2 ({setHouseId}){
 
 
     useEffect(()=>{
-        fetch("https://house-server-zocq.onrender.com/houses")
+        fetch("https://house-db.onrender.com/houses")
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
@@ -64,7 +64,7 @@ function Page2 ({setHouseId}){
                                         key={index}
                                         onClick={() => handleIndividualProperty(house.id)}
                                         sx={{
-                                            backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`,
+                                            backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`,
                                             backgroundSize: "cover", // Ensure the image covers the box
                                             backgroundPosition: "center", // Center the image
                                             width: "100%", // Adjust width as needed

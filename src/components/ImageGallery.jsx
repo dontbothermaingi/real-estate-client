@@ -12,8 +12,8 @@ function ImageGallery ({images}){
                         {images.map((image,index) => (
                             <ImageListItem key={index}>
                                 <img
-                                    srcSet={`https://house-server-zocq.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                    src={`https://house-server-zocq.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format`}
+                                    srcSet={`https://house-db.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                                    src={`https://house-db.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format`}
                                     alt={image.id}
                                     loading="lazy"
                                 />
@@ -26,8 +26,8 @@ function ImageGallery ({images}){
                 {images.map((image,index) => (
                     <ImageListItem key={index}>
                         <img
-                            srcSet={`https://house-server-zocq.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                            src={`https://house-server-zocq.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format`}
+                            srcSet={`https://house-db.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            src={`https://house-db.onrender.com/images/${image.photo}?w=164&h=164&fit=crop&auto=format`}
                             alt={image.id}
                             loading="lazy"
                         />

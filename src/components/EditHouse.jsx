@@ -45,7 +45,7 @@ function EditHouse (){
     })
 
     useEffect(() => {
-        fetch(`https://house-server-zocq.onrender.com/house/${houseId}`)
+        fetch(`https://house-db.onrender.com/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
 
@@ -111,7 +111,7 @@ function EditHouse (){
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            descriptions:descriptionData
+            descriptions:values
         }))
     }
 
@@ -122,9 +122,7 @@ function EditHouse (){
 
     // Function to delete a description field
     function DeleteDescription(index){
-        const newDescriptionField = [...descriptionData]
-        newDescriptionField.splice(index, 1);
-        setDescriptionData(newDescriptionField);
+        setDescriptionData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
     function handleAmenityChange(event,index) {
@@ -134,7 +132,7 @@ function EditHouse (){
 
         setFormData(prevData => ({
             ...prevData,
-            amenities: amenityData
+            amenities: values
         }));
 
     }    
@@ -146,9 +144,7 @@ function EditHouse (){
 
     // function to remove an amenity input field by index
     function DeleteAmenity(index){
-        const newAmenityField = [...amenityData];
-        newAmenityField.splice(index , 1);
-        setAmenityData(newAmenityField);
+        setAmenityData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
     function AddPhoto(){
@@ -212,7 +208,7 @@ function EditHouse (){
 
         console.log(formData)
 
-        fetch(`https://house-server-zocq.onrender.com/house/${houseId}`,{
+        fetch(`https://house-db.onrender.com/house/${houseId}`,{
             method:"PATCH",
             credentials: 'include',
             body:formDataToSend

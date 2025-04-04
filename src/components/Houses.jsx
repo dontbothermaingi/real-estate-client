@@ -60,9 +60,9 @@ function Houses ({filters,setHouseId,aim,pupose}){
                     <Box>
                     <Typography fontFamily={"GT Medium"} color="black" paddingBottom={"20px"} fontSize={"30px"}>{filteredData.length} Listings.</Typography>
                         <Box
-                        display={'grid'}
-                        gridTemplateColumns={{xs:'repeat(1, 1fr)', md:'repeat(2, 1fr)', sm:'repeat(4, 1fr)'}}
-                        gap={'50px'}
+                            display={'grid'}
+                            gridTemplateColumns={{xs:'repeat(1, 1fr)', md:'repeat(2, 1fr)', sm:'repeat(4, 1fr)'}}
+                            gap={'50px'}
                         >
                             {filteredData.map((house,index) => (
                                 <Box

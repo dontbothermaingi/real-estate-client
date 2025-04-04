@@ -73,7 +73,7 @@ function AddHouseMobile (){
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            descriptions:descriptionData
+            descriptions:values
         }))
     }
 
@@ -84,7 +84,7 @@ function AddHouseMobile (){
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            amenities:amenityData
+            amenities:values
         }))
     }
 
@@ -93,9 +93,7 @@ function AddHouseMobile (){
     }
 
     function DeleteDescription(index){
-        const newDescriptionField = [...descriptionData];
-        newDescriptionField.splice(index , 1);
-        setDescriptionData(newDescriptionField);
+        setDescriptionData(prevItems => prevItems.filter((_,i) => i !== index));
 
     }
 
@@ -104,9 +102,7 @@ function AddHouseMobile (){
     }
 
     function DeleteAmenity(index){
-        const newAmenityField = [...amenityData];
-        newAmenityField.splice(index , 1);
-        setAmenityData(newAmenityField);
+        setAmenityData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
     function AddPhoto(){
@@ -170,7 +166,7 @@ function AddHouseMobile (){
             })
         }
 
-        fetch("https://house-server-zocq.onrender.com/houses",{
+        fetch("https://house-db.onrender.com/houses",{
             method:"POST",
             credentials:'include',
             body:formDataToSend

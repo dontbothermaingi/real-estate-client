@@ -80,7 +80,7 @@ function AddHouse (){
 
         setFormData(prevFormData => ({
             ...prevFormData,
-            descriptions:descriptionData
+            descriptions:values
         }))
     }
 
@@ -103,7 +103,7 @@ function AddHouse (){
 
         setFormData(prevData => ({
             ...prevData,
-            amenities: amenityData
+            amenities: values
         }));
     }    
 
@@ -114,9 +114,7 @@ function AddHouse (){
 
     // function to remove an amenity input field by index
     function DeleteAmenity(index){
-        const newAmenityField = [...amenityData];
-        newAmenityField.splice(index , 1);
-        setAmenityData(newAmenityField);
+        setAmenityData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
     function AddPhoto(){
@@ -182,7 +180,7 @@ function AddHouse (){
         console.log(formData)
 
 
-        fetch("https://house-server-zocq.onrender.com/houses",{
+        fetch("https://house-db.onrender.com/houses",{
             method:"POST",
             credentials: 'include',
             body:formDataToSend
@@ -224,7 +222,7 @@ function AddHouse (){
         .catch((error) => {
             console.error('Error with stock update operations:', error);
             setOpenSnackBar(true)
-            setSuccessMessage("Invalid House Listing!")
+            setSuccessMessage("Invalid House Listed!")
         })
     }
 

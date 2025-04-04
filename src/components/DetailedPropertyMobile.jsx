@@ -26,7 +26,7 @@ function DetailedPropertyMobile (){
     
 
     useEffect(()=>{
-        fetch(`https://real-estate-server-0d4s.onrender.com/house/${houseId}`)
+        fetch(`https://house-db.onrender.com/house/${houseId}`)
         .then(response => response.json())
         .then((data) => {
             setHouse(data)
@@ -96,7 +96,7 @@ function DetailedPropertyMobile (){
                     <Box>
                         <Box
                             sx={{
-                                backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
+                                backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                 backgroundSize: "cover", // Ensure the image covers the box
                                 backgroundPosition: "center", // Center the image
                                 width: "100%", // Adjust width as needed
@@ -385,7 +385,7 @@ function DetailedPropertyMobile (){
                     <Box>
                         <Box
                             sx={{
-                                backgroundImage: `url(https://house-server-zocq.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
+                                backgroundImage: `url(https://house-db.onrender.com/images/${house.photos[0].photo})`, // Use `url()`
                                 backgroundSize: "cover", // Ensure the image covers the box
                                 backgroundPosition: "center", // Center the image
                                 width: "100%", // Adjust width as needed
