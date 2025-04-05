@@ -1,6 +1,5 @@
-import { Alert, Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Alert, Box, Button, Divider, FormControl, IconButton, MenuItem, Select, Snackbar,TextField, Typography, useMediaQuery } from "@mui/material";
 import { useRef, useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
 import PropertyDisplayNavbar from "./PropertyDisplayNavBar";
 import AddHouseMobile from "./AddHouseMobile";
 import { DeleteForever } from "@mui/icons-material";
@@ -9,13 +8,11 @@ import AddOutlined from "@mui/icons-material/AddOutlined";
 
 function AddHouse (){
 
-    const [filePreview,setFilePreview] = useState();
     const fileUploadRef = useRef();
     const [successMessage, setSuccessMessage] = useState("")
     const [openSnackBar, setOpenSnackBar] = useState(false)
 
     const isMobile = useMediaQuery('(max-width:768px)');
-    
     const [formData, setFormData] = useState({
         location:"",
         address:"",
@@ -38,9 +35,7 @@ function AddHouse (){
 
     const [amenityData, setAmenityData] = useState([{amenity:""}])
 
-    const [photoData, setPhotoData] = useState({
-        photo:"",
-    })
+    const [photoData, setPhotoData] = useState([{photo:""}])
 
     function handleChange(event){
         const{name,value} = event.target
@@ -51,25 +46,25 @@ function AddHouse (){
         }))
     }
 
-    function handlePhotoChange(event) {
-        const file = event.target.files[0]; 
-
-        setFilePreview(URL.createObjectURL(file));
+    function handlePhotoChange(event, index){
+        const { name, files } = event.target;
+        const file = files[0];  
 
         if (file) {
-            setPhotoData((prevPhotoData) => ({
-                ...prevPhotoData,
-                photo: file,
-                preview:URL.createObjectURL(file),
-            })
-        );
+            const values = [...photoData]
+            const preview = URL.createObjectURL(file);
+
+            values[index] = {...values[index], [name]:file, preview}
+
+            setPhotoData(values)
+
+            setFormData(prevData => ({
+                ...prevData,
+                photos: values
+            }))
+        }
 
     }
-
-        // Reset input field
-        event.target.value = "";
-    }
-    
     
 
     // Function to handle the update of description input field
@@ -115,34 +110,28 @@ function AddHouse (){
         setAmenityData(prevItems => prevItems.filter((_,i) => i !== index));
     }
 
-    function AddPhoto(){
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            photos:[...prevFormData.photos, photoData]
-        }))
-
-        // Clear input after adding
-        setPhotoData({ photo: "", preview: "" });
-        setFilePreview("");
-
+    function HandleNewInputField(){
+        setPhotoData([ ...photoData, { photo: "", preview: "" }]);
     }
 
-    function DeletePhoto(index){
+    function handleDeleteInputField(index){
+        const updatedItems = photoData.filter((_,i) => i !== index)
+
+        setPhotoData(updatedItems);
+        
         setFormData(prevFormData => ({
             ...prevFormData,
-            photos:prevFormData.photos.filter((_,i) => i !== index)
+            photos: updatedItems
         }))
-
     }
 
     function handleSubmit(event){
 
         event.preventDefault();    
 
-        if(!formData.photos || !formData.amenities || !formData.descriptions){
+        if(!formData.photos.length > 0 || !formData.amenities || !formData.descriptions){
             setOpenSnackBar(true)
-            setSuccessMessage("Invalid House Listing!")
+            setSuccessMessage("Invalid House Listing!. Please fill in all the fields")
         }
 
         const formDataToSend = new FormData();
@@ -175,7 +164,7 @@ function AddHouse (){
         }
 
         // console.log(amenityData)
-        console.log(formData)
+        console.log(formData.photos)
 
 
         fetch("https://house-db.onrender.com/houses",{
@@ -213,6 +202,7 @@ function AddHouse (){
 
             setAmenityData([{amenity:""}])
             setDescriptionData([{description:""}])
+            setPhotoData([{photo:""}])
 
             setOpenSnackBar(true)
             setSuccessMessage("House Listed Successfully!")
@@ -315,47 +305,11 @@ function AddHouse (){
                 <Typography fontFamily={"GT Ultrabold"} fontSize={"40px"} color="black" textAlign={'center'}>CREATE A HOUSE LISTING</Typography>
                 <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', backgroundColor:'white', borderRadius:'15px', border:'2px dashed #ddd', padding:'30px'}}>
 
+                    
+
                     <Box>
-                        <TableContainer>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell><Typography fontFamily={"GT Bold"} fontSize={'30px'}>House Photos</Typography></TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {formData.photos.map((photo, index) => (
-                                        <TableRow key={index}>
-                                            <TableCell>
-                                                {photo.preview ? (
-                                                    <Box
-                                                        width={'600px'} 
-                                                        height={'300px'} 
-                                                    >
-                                                        <img 
-                                                            src={photo.preview}
-                                                            alt="Uploaded Preview"
-                                                            style={{
-                                                                width: "100%",
-                                                                height: "100%",
-                                                                objectFit: "contain",
-                                                                borderRadius: "15px"
-                                                            }}
-                                                        />
-                                                    </Box>
-                                                ) : (
-                                                    "No Image"
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton color="error" onClick={() => DeletePhoto(index)}>
-                                                    <CloseIcon />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                    <TableRow>
-                                    <TableCell>
+                        {photoData.map((item,index) => (
+                            <Box key={index} display={'flex'} gap={'20px'}>
                                         {/* Drag and Drop Area */}
                                         <Box 
                                             onClick={handleImageUpload}
@@ -383,9 +337,9 @@ function AddHouse (){
                                                 }}
                                             >
                                                 {/* Show uploaded image if available */}
-                                                {filePreview ? (
+                                                {item.preview ? (
                                                     <img 
-                                                        src={filePreview}
+                                                        src={item.preview}
                                                         alt="Uploaded Preview"
                                                         style={{
                                                             width: "100%",
@@ -415,27 +369,30 @@ function AddHouse (){
                                                 )}
                                             </Box>
 
-                                            {filePreview && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
+                                            {item.preview && <Button onClick={() => handleImageUpload()} sx={{fontFamily:'GT Bold', backgroundColor:'white', color:'orange', ml:'520px', mt:'20px'}}>Change Photo</Button>}
                                         </Box>
+
+                                        <IconButton onClick={() => handleDeleteInputField(index)}>
+                                                <DeleteForever sx={{fontSize:'30px', color:'black', border:'2px solid red', padding:'10px', borderRadius:"8px", ":hover":{backgroundColor:'red', color:'white'}}}/>
+                                        </IconButton>
 
                                         {/* Hidden File Input */}
                                         <input 
                                             type="file"
                                             name="photo"
                                             accept="image/*"
-                                            onChange={handlePhotoChange}
+                                            onChange={(e) => handlePhotoChange(e, index)}
                                             hidden
                                             ref={fileUploadRef}
                                             multiple
                                         />
-                                    </TableCell>
+                            </Box>
+                        ))}
 
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <Button onClick={AddPhoto} variant="contained" sx={{margin:'20px', fontFamily:"GT Bold", backgroundColor:'orange', color:"white", ":hover":{backgroundColor:'white', color:'orange'} }}>ADD PHOTO</Button>
-
+                                <Button onClick={HandleNewInputField} variant="contained" style={{backgroundColor:'grey', color:'white', marginTop:'20px', display:'flex', justifyContent:'center', alignItems:'center', marginBottom:'20px'}}>
+                                    <AddOutlined sx={{color:'white', fontSize:'19px'}}/>
+                                    <Typography fontWeight={'bold'} fontSize={'12px'}>Add new row</Typography>
+                                </Button>
                     </Box>
                     
                     <Divider orientation="horizontal" style={{borderColor:"#ddd", marginTop:'20px', marginBottom:'20px'}}/>
