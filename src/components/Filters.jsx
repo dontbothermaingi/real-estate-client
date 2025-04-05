@@ -40,7 +40,7 @@ function Filters ({setFilters}){
         setStartingPrice("")
         setEndingPrice("")
         setPropertyType("")
-        setRooms("")
+        setBeds("")
         
         // Ensure `setFilters` is updated after state changes
         setFilters({

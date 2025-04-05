@@ -111,7 +111,7 @@ function PropertyDisplayMobile (){
  
                     <Box>
                         <Box>
-                            <Button onClick={() => handleToggele('Filters')} variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={'GT Bold'}>{activeSelection === 'Filters' ? "HIDE FILTER":"SHOW FILTER"}</Typography></Button>
+                            <Button onClick={() => handleToggele('Filters')} variant="contained" sx={{backgroundColor:'orange'}}><Typography fontFamily={'GT Bold'} fontSize={'12px'}>{activeSelection === 'Filters' ? "HIDE FILTER":"SHOW FILTER"}</Typography></Button>
                         </Box>
 
                         <Box mt={'20px'} mb={'20px'}>{activeSelection === 'Filters' && <FiltersMobile setFilters={setFilters}/>}</Box>
