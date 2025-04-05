@@ -134,7 +134,6 @@ function DetailedPropertyMobile (){
                 </Box>
                 
                 <Box display={'flex'} flexDirection={'column'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Price</Typography>
                     <Box display={'grid'} gridTemplateColumns={{xs:'repeat(2, 1fr)'}} gap={'10px'} mt={'10px'} >
                         <Box>
                             <Typography fontSize={'30px'} fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}</Typography>
@@ -145,7 +144,7 @@ function DetailedPropertyMobile (){
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px'}}/>
 
-                <Box mt={'30px'} padding={'20px'}>
+                <Box mt={'15px'} padding={'20px'}>
                     <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.location}</Typography>
                     <Box display={'flex'} alignItems={'center'} gap={'0px'} ml={'-13px'}>
                         <IconButton>
@@ -421,6 +420,12 @@ function DetailedPropertyMobile (){
                         {checked && <ImageGallery images={house?.photos || []} /> }
                     </Box>
 
+                <Box display={'flex'} flexDirection={'column'} padding={'20px'}>
+                    <Typography fontSize={'30px'} fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'25px'}}>year</span></Typography>
+                </Box>
+
+                <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px'}}/>
+
                 <Box mt={'30px'} padding={'20px'}>
                     <Typography fontFamily={'GT Bold'} fontSize={'30px'} color="black">{house.location}</Typography>
                     <Box display={'flex'} alignItems={'center'} gap={'0px'} ml={'-13px'}>
@@ -431,18 +436,6 @@ function DetailedPropertyMobile (){
                     </Box>
                 </Box>
 
-                <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px'}}/>
-
-                <Box display={'flex'} flexDirection={'column'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Price</Typography>
-                    <Box display={'grid'} gridTemplateColumns={{xs:'repeat(2, 1fr)'}} gap={'10px'} mt={'10px'} >
-                        <Box display={'flex'} flexDirection={'column'} gap={'8px'} border="1px solid #ddd" padding="10px">
-                            <Typography fontFamily={'GT Light'} color="black">Monthly Rental:</Typography>
-                            <Typography fontFamily={'GT Medium'} color="black">{new Intl.NumberFormat("en-AE",{style:'currency', currency:'AED'}).format(house.price)}/<span style={{fontFamily:'GT Light', fontSize:'20px'}}>month</span></Typography>
-                        </Box>
-                    </Box>
-
-                </Box>
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px', marginTop:'10px'}}/>
 
@@ -543,13 +536,12 @@ function DetailedPropertyMobile (){
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px', marginTop:'10px'}}/>
 
-                <Box display={'flex'} flexDirection={'column'} gap={'20px'} padding={'20px'}>
-                    <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'}>Description</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Immerse yourself in the unparalleled luxury and equestrian elegance of Al Habtoor Polo Resort & Club, ideally located in the heart of Dubailand. This exquisite 3-bedroom villa seamlessly blends contemporary design, comfort, and sophistication. With sweeping views of the pristine polo fields and a 5-star hotel at its center, this villa offers a rare opportunity to live in Dubai’s premier equestrian community.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Sophisticated Design: Featuring an open-plan living area, three elegantly designed bedrooms, and premium finishes throughout, this villa exudes comfort and style. Its layout is thoughtfully crafted for both relaxed living and effortless entertaining.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black">Prime Location & Polo Field Views: Revel in breathtaking panoramic views of the polo fields right from the comfort of your home. Expansive windows flood the villa with natural light, offering serene vistas of lush greenery and live polo action at your doorstep.</Typography>
-                    <Typography fontFamily={'GT Light'} color="black"></Typography>
-                </Box>
+                <Typography fontFamily={'GT Bold'} color="black" fontSize={'22px'} mt={'14px'} paddingLeft={'20px'} paddingRight={'20px'} paddingTop={'20px'}>Description</Typography>
+                {house.descriptions.map((description, index) => (
+                    <Box display={'flex'} flexDirection={'column'} gap={'20px'} padding={'20px'}>
+                        <Typography fontFamily={'GT Light'} color="black" key={index}>{description.description}</Typography>
+                    </Box>
+                ))}
 
                 <Divider orientation="horizontal" style={{borderColor:"gray", marginLeft:'10px', marginRight:'10px', marginTop:'10px'}}/>
 
