@@ -1,18 +1,31 @@
 import LocationOn from "@mui/icons-material/LocationOn";
 import { Box, Card, CardContent, Divider, IconButton, Typography, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+const HOUSE_CACHE_KEY = "house_cached_data";
+const TTL = 1000 * 60 * 5;
 
 function Houses ({filters,setHouseId,aim,pupose}){
 
     const [houses, setHouses] = useState([])
     const [activeSelection, setActiveSelection] = useState("1")
     // const [filteredData, setFilteredData] = useState([])
-    const navigate = useNavigate()
 
     const isMobile = useMediaQuery('(max-width:1700px)')
 
     useEffect(()=>{
+
+        const cache = localStorage.getItem(HOUSE_CACHE_KEY);
+
+        if(cache){
+            const {expiry,data} = JSON.parse(cache);
+            if(Date.now() < expiry){
+                setHouses(data);
+                return;
+            }
+        }else{
+            localStorage.removeItem(HOUSE_CACHE_KEY);
+        }
+
         fetch("https://house-db.onrender.com/houses",{
             method:'GET',
             credentials:'include'
@@ -20,6 +33,11 @@ function Houses ({filters,setHouseId,aim,pupose}){
         .then(response => response.json())
         .then((data) => {
             setHouses(data)
+
+            localStorage.setItem(HOUSE_CACHE_KEY, JSON.stringify({
+                data,
+                expiry: Date.now() + TTL
+            }));
         })
     },[])
 
